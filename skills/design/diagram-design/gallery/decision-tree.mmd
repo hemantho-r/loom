@@ -1,0 +1,7 @@
+```mermaid
+flowchart TD
+    Start([Triage incoming alert]) --> Sev{Severity?}
+    Sev -->|Sev1| Page[Page on-call now]
+    Sev -->|Sev2| Ticket[File ticket, 4h SLA]
+    Sev -->|Sev3| Backlog[Backlog for review]
+```

@@ -1,0 +1,253 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://loom.dev/schemas/skill.schema.json",
+  "title": "Loom Skill Definition",
+  "description": "Schema for SKILL.yaml files in the Loom skill system",
+  "type": "object",
+  "required": ["name", "version", "description", "provides"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^(@[a-z0-9-]+/)?[a-z0-9-]+$",
+      "description": "Unique skill identifier (e.g., @loom/tdd)"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-z0-9.]+)?(\\+[a-z0-9.]+)?$",
+      "description": "Semantic version (e.g., 1.0.0)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Brief description of what the skill does"
+    },
+    "license": {
+      "type": "string",
+      "description": "License identifier (e.g., MIT)"
+    },
+    "authors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/author"
+      },
+      "description": "Skill authors"
+    },
+    "provides": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/capability"
+      },
+      "minItems": 1,
+      "description": "Capabilities this skill provides"
+    },
+    "requires": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/requirement"
+      },
+      "description": "Dependencies this skill requires"
+    },
+    "context": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/context-requirement"
+      },
+      "description": "Context requirements for this skill"
+    },
+    "quality": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/quality-gate"
+      },
+      "description": "Quality gates for this skill"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/reference"
+      },
+      "description": "Reference files loaded on demand"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for discovery and categorization"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["engineering", "design", "productivity", "devops", "meta", "testing", "security", "other"],
+      "description": "Skill category"
+    },
+    "invocation": {
+      "type": "string",
+      "enum": ["user", "model", "either"],
+      "description": "Who may invoke the skill: user-only, model auto-invoke, or either (default)"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["beginner", "intermediate", "advanced"],
+      "description": "Skill difficulty level"
+    },
+    "estimatedTime": {
+      "type": "string",
+      "description": "Estimated time to use (e.g., '5 minutes', '1 hour')"
+    }
+  },
+  "definitions": {
+    "author": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "required": ["id", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Unique capability identifier"
+        },
+        "description": {
+          "type": "string"
+        },
+        "input": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/parameter"
+          }
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/parameter"
+          }
+        }
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "file", "file[]", "object", "array", "enum"]
+        },
+        "description": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "default": {},
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "context-requirement": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "default": {
+          "type": "string"
+        }
+      }
+    },
+    "quality-gate": {
+      "type": "object",
+      "required": ["id", "description", "type", "severity"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["structural", "behavioral", "content", "performance"]
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["error", "warning", "info"]
+        },
+        "check": {
+          "type": "string"
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "when": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

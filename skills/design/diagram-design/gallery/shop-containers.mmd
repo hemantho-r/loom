@@ -1,0 +1,12 @@
+```mermaid
+flowchart LR
+    subgraph Shop["Shop System"]
+        Web[Web App]
+        API[API Service]
+        DB[(Orders DB)]
+    end
+    User([Shopper]) -->|HTTPS| Web
+    Web -->|HTTPS| API
+    API -->|SQL| DB
+    API -->|publishes| Queue[Order Events]
+```

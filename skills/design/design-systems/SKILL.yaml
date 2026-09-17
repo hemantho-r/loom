@@ -1,0 +1,73 @@
+name: "@loom/design-systems"
+version: "1.0.0"
+description: "Design system creation and maintenance"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "design-system"
+    description: "Create and maintain design systems"
+    input:
+      - name: "action"
+        type: "enum"
+        description: "Action to perform"
+        values: ["init", "audit", "document", "publish"]
+        required: true
+    output:
+      - name: "result"
+        type: "object"
+        description: "Design system action result"
+
+requires:
+  - id: "web-fetch"
+    description: "Ability to fetch a URL when extracting brand tokens from an existing website"
+    capabilities: ["fetch-url"]
+    optional: true
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript"]
+    required: true
+  - type: "framework"
+    values: ["react", "vue", "svelte"]
+    required: true
+
+quality:
+  - id: "token-coverage"
+    type: "structural"
+    description: "Design tokens cover all use cases"
+    severity: "error"
+  - id: "component-documentation"
+    type: "content"
+    description: "All components documented"
+    severity: "warning"
+  - id: "versioning"
+    type: "behavioral"
+    description: "Proper versioning strategy"
+    severity: "warning"
+  - id: "slop-test"
+    type: "behavioral"
+    description: "Must pass the slop-test checklist before emitting UI"
+    severity: "error"
+  - id: "theme-rotation"
+    type: "behavioral"
+    description: "Must select an explicit theme and macrostructure, rotating across runs"
+    severity: "warning"
+
+references:
+  - path: "./references/tokens.md"
+    when: "for-tokens"
+  - path: "./references/component-api.md"
+    when: "for-components"
+  - path: "./references/themes.md"
+    when: "when-choosing-visual-direction"
+  - path: "./references/macrostructures.md"
+    when: "when-choosing-page-layout"
+  - path: "./references/slop-test.md"
+    when: "before-emitting-ui"
+
+tags: ["design", "design-system", "tokens", "components"]
+category: "design"
+difficulty: "advanced"

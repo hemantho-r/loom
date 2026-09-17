@@ -1,0 +1,28 @@
+{
+  "name": "loom",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Skills woven together — A skill operating system for AI coding agents",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @loom/core build && pnpm --filter @loom/schema build && pnpm --filter @loom/cli build",
+    "dev": "pnpm --filter @loom/core dev & pnpm --filter @loom/cli dev",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean",
+    "validate": "node scripts/validate-skills.mjs",
+    "eval": "node --experimental-strip-types evals/eval-runner.ts",
+    "eval:grade": "node scripts/grade-eval.mjs",
+    "check": "node scripts/check-consistency.mjs",
+    "generate:adapters": "node scripts/generate-adapters.mjs"
+  },
+  "dependencies": {
+    "@loom/core": "workspace:*",
+    "chalk": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

@@ -1,0 +1,11 @@
+```mermaid
+gantt
+    title Checkout rollout
+    dateFormat YYYY-MM-DD
+    section Build
+    Persistence     :a1, 2026-01-05, 3d
+    Charge          :a2, after a1, 3d
+    section Release
+    Email           :a3, after a2, 2d
+    Rollout         :milestone, after a3, 0d
+```

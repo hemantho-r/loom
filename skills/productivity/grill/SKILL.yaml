@@ -1,0 +1,49 @@
+name: "@loom/grill"
+version: "1.0.0"
+description: "Socratic grilling interview that forces clarity before building"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "grill"
+    description: "Interview the user until the problem, constraints, and success criteria are explicit"
+    input:
+      - name: "topic"
+        type: "string"
+        description: "What to grill on (feature, bug, decision, plan)"
+        required: true
+    output:
+      - name: "brief"
+        type: "object"
+        description: "Written brief: problem, constraints, options, decision, acceptance criteria"
+
+invocation: "user"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "no-leading-questions"
+    type: "behavioral"
+    description: "Questions must be open, one at a time — never stacked or leading"
+    severity: "error"
+  - id: "written-brief"
+    type: "behavioral"
+    description: "Must end with a written brief the user confirms"
+    severity: "error"
+  - id: "assumptions-flagged"
+    type: "behavioral"
+    description: "Every unresolved assumption must be flagged, never silently resolved"
+    severity: "warning"
+
+references:
+  - path: "./references/grill-techniques.md"
+    when: "during-interview"
+
+tags: ["productivity", "interview", "grilling", "clarity", "spec"]
+category: "productivity"
+difficulty: "intermediate"

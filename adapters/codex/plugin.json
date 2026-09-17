@@ -1,0 +1,32 @@
+{
+  "name": "loom",
+  "description": "Skills woven together — A skill operating system for AI coding agents",
+  "version": "0.1.0",
+  "skills": [
+    {
+      "name": "tdd",
+      "path": "../../skills/engineering/tdd",
+      "description": "Test-driven development with red-green-refactor cycle"
+    },
+    {
+      "name": "review",
+      "path": "../../skills/engineering/review",
+      "description": "Multi-axis code review with quality gates"
+    },
+    {
+      "name": "debug",
+      "path": "../../skills/engineering/debug",
+      "description": "Systematic debugging workflow"
+    },
+    {
+      "name": "security",
+      "path": "../../skills/engineering/security",
+      "description": "Security review and hardening"
+    },
+    {
+      "name": "performance",
+      "path": "../../skills/engineering/performance",
+      "description": "Performance optimization"
+    }
+  ]
+}

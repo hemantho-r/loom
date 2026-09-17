@@ -1,0 +1,117 @@
+# Refactoring
+
+## Overview
+
+Safe, incremental code refactoring with test coverage.
+
+## When to Use
+
+- Code is hard to understand
+- Code is hard to change
+- Code has code smells
+- Before adding new features
+
+## Workflow
+
+### Step 1: Ensure Test Coverage
+
+Before refactoring:
+
+- Existing tests pass
+- Add tests if coverage is low
+- Verify you can break the code
+
+### Step 2: Identify Smell
+
+Recognize code smells:
+
+- Long methods
+- Large classes
+- Duplicated code
+- Complex conditionals
+- Long parameter lists
+
+### Step 3: Plan Refactoring
+
+Choose appropriate refactoring:
+
+- Extract Method/Function
+- Rename Variable/Function
+- Move Method/Field
+- Inline Method
+- Simplify Conditional
+
+### Step 4: Refactor Incrementally
+
+Make small changes:
+
+- One refactoring at a time
+- Run tests after each change
+- Commit after each successful refactoring
+
+### Step 5: Verify
+
+Confirm refactoring worked:
+
+- All tests still pass
+- No behavior change
+- Code is cleaner
+
+## Common Refactorings At a Glance
+
+- **Extract Method** — pull a block into its own named function
+- **Rename Variable/Function** — replace `x`/`data`/`temp` with a name that says what it holds
+- **Move Method/Field** — relocate a member to the class whose data it actually uses
+- **Inline Method** — fold a needlessly separate method back into its one caller
+- **Simplify Conditional** — replace a nested/compound condition with a named predicate function
+
+Full worked examples for each, and how to recognize which smell calls for which one, are in the references below — don't re-derive the catalog from scratch each time.
+
+## References
+
+- **[smells.md](./references/smells.md)** — how to recognize each code smell (long method, feature envy, data clumps, etc.) before picking a fix
+- **[refactoring-catalog.md](./references/refactoring-catalog.md)** — full worked before/after examples for each refactoring technique
+
+## Quality Gates
+
+- **tests-pass**: Tests pass before and after
+- **small-steps**: Refactor in small steps
+- **no-behavior-change**: No behavior change
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "It works, don't touch it" | Working code can still be bad code — "works" and "safe to change next time" are different properties. |
+| "I don't have time to refactor" | You don't have time not to — the same mess will cost more to work around next time, and the time after that. |
+| "It's too risky" | Tests make it safe. If there aren't tests, that's Step 1, not a reason to skip refactoring. |
+| "While I'm refactoring, I'll also fix this bug I noticed" | That's a behavior change hiding inside a no-behavior-change commit. Fix the bug separately so either change can be reverted independently. |
+| "This refactor is small, I don't need to run tests after" | "Small" is a guess about blast radius. The test suite is what actually confirms it. |
+| "I'll refactor the whole module while I'm in here" | Scope creep turns a reviewable, revertible change into a large diff nobody can meaningfully review — extract one smell at a time. |
+| "The tests are slow, I'll run them at the end" | Running tests only at the end means when something breaks, you're searching across every step instead of the one that just ran. |
+| "This new pattern is objectively better, I don't need to justify it" | "Better" without an identified smell is a rewrite in disguise — name the smell (Step 2) first, or it's not refactoring. |
+| "I already know this class needs a full rewrite" | That's a bigger, riskier claim than "this method needs cleanup." Confirm with the smell catalog before jumping to the largest possible intervention. |
+
+## Red Flags — STOP and Split the Change
+
+- The diff includes both a rename and a behavior change
+- You haven't run tests since your third consecutive edit
+- You're about to touch a file outside the smell you set out to fix
+- "No behavior change" and you can't actually point to what proves it (no test covers the changed path)
+- The refactor is turning into "let me just rewrite this whole thing"
+- You committed a refactor and a bug fix in the same commit
+
+## Self-Critique Scoring
+
+Before merging the refactor, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Baseline** | Did the suite pass before I touched anything? | 1-5 |
+| **Steps** | Was each transformation one step + test run + commit? | 1-5 |
+| **Smell match** | Did I name the smell first, then pick the technique? | 1-5 |
+| **Behavior** | Are all observable outputs byte-identical? | 1-5 |
+| **Scope** | Is behavior-changing work in a separate commit? | 1-5 |
+| **Names** | Would the new names survive review without explanation? | 1-5 |
+
+**Minimum passing score:** 30/30

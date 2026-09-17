@@ -1,0 +1,18 @@
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant Cache
+    participant DB
+
+    Client->>API: GET /users/42
+    API->>Cache: lookup(42)
+    alt cache hit
+        Cache-->>API: user data
+    else cache miss
+        API->>DB: SELECT * FROM users WHERE id=42
+        DB-->>API: row
+        API->>Cache: set(42, row)
+    end
+    API-->>Client: 200 OK
+```

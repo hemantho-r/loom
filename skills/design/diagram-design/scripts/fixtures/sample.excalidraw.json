@@ -1,0 +1,23 @@
+{
+  "type": "excalidraw",
+  "elements": [
+    { "id": "r1", "type": "rectangle", "x": 0, "y": 0 },
+    { "id": "t1", "type": "text", "containerId": "r1", "originalText": "Cart" },
+    { "id": "r2", "type": "rectangle", "x": 200, "y": 0 },
+    { "id": "t2", "type": "text", "containerId": "r2", "originalText": "Checkout" },
+    { "id": "d1", "type": "diamond", "x": 400, "y": 0 },
+    { "id": "t3", "type": "text", "containerId": "d1", "originalText": "Paid?" },
+    {
+      "id": "a1",
+      "type": "arrow",
+      "startBinding": { "elementId": "r1" },
+      "endBinding": { "elementId": "r2" }
+    },
+    {
+      "id": "a2",
+      "type": "arrow",
+      "startBinding": { "elementId": "r2" },
+      "endBinding": { "elementId": "d1" }
+    }
+  ]
+}

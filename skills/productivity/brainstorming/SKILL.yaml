@@ -1,0 +1,49 @@
+name: "@loom/brainstorming"
+version: "1.0.0"
+description: "Structured brainstorming and ideation"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "brainstorming"
+    description: "Structured brainstorming for technical problems"
+    input:
+      - name: "problem"
+        type: "string"
+        description: "Problem to brainstorm"
+        required: true
+    output:
+      - name: "ideas"
+        type: "object"
+        description: "Brainstormed ideas and decisions"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "divergent-then-convergent"
+    type: "behavioral"
+    description: "Must diverge before converging"
+    severity: "error"
+  - id: "challenge-assumptions"
+    type: "behavioral"
+    description: "Must challenge assumptions"
+    severity: "warning"
+  - id: "document-decisions"
+    type: "behavioral"
+    description: "Must document decisions"
+    severity: "error"
+
+references:
+  - path: "./references/brainstorming-techniques.md"
+    when: "for-techniques"
+  - path: "./references/visual-maps.md"
+    when: "when-mapping-ideas-visually"
+
+tags: ["productivity", "brainstorming", "ideation", "planning"]
+category: "productivity"
+difficulty: "beginner"

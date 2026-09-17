@@ -1,0 +1,53 @@
+name: "@loom/lifecycle"
+version: "1.0.0"
+description: "End-to-end delivery lifecycle: DEFINE to SHIP with triage and approval gates"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "lifecycle"
+    description: "Run a unit of work through DEFINE, PLAN, BUILD, VERIFY, REVIEW, SHIP"
+    input:
+      - name: "work"
+        type: "string"
+        description: "The feature, fix, or change to deliver"
+        required: true
+    output:
+      - name: "record"
+        type: "object"
+        description: "Phase record with triage class, gate decisions, and ship evidence"
+
+invocation: "model"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "triage-first"
+    type: "behavioral"
+    description: "Must triage as Spike, Bounded, or Architectural before planning"
+    severity: "error"
+  - id: "approval-gates"
+    type: "behavioral"
+    description: "Must pass the approval gate at the end of each phase before advancing"
+    severity: "error"
+  - id: "ship-evidence"
+    type: "behavioral"
+    description: "SHIP requires linked tests, review, and rollout/rollback evidence"
+    severity: "error"
+
+references:
+  - path: "./references/phases.md"
+    when: "during-delivery"
+  - path: "./references/triage.md"
+    when: "before-planning"
+  - path: "./references/personas.md"
+    when: "when-staffing-a-phase"
+
+tags: ["engineering", "lifecycle", "delivery", "orchestration", "methodology"]
+category: "engineering"
+difficulty: "advanced"

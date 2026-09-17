@@ -1,0 +1,54 @@
+name: "@loom/documentation"
+version: "1.0.0"
+description: "Technical documentation creation and maintenance"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "documentation"
+    description: "Create and maintain technical documentation"
+    input:
+      - name: "type"
+        type: "enum"
+        description: "Documentation type"
+        values: ["api", "guide", "tutorial", "reference", "readme"]
+        required: true
+      - name: "target"
+        type: "string"
+        description: "What to document"
+        required: true
+    output:
+      - name: "docs"
+        type: "object"
+        description: "Documentation output"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "accuracy"
+    type: "behavioral"
+    description: "Documentation is accurate"
+    severity: "error"
+  - id: "completeness"
+    type: "behavioral"
+    description: "Documentation covers all features"
+    severity: "warning"
+  - id: "clarity"
+    type: "content"
+    description: "Documentation is clear and concise"
+    severity: "warning"
+
+references:
+  - path: "./references/api-docs.md"
+    when: "for-api-docs"
+  - path: "./references/guide-patterns.md"
+    when: "for-guides"
+
+tags: ["engineering", "documentation", "docs", "readme"]
+category: "engineering"
+difficulty: "intermediate"

@@ -1,0 +1,68 @@
+name: "@loom/review"
+version: "1.0.0"
+description: "Multi-axis code review with quality gates"
+license: "MIT"
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "review-gate"
+    description: "Multi-dimensional code review"
+    input:
+      - name: "diff"
+        type: "string"
+        description: "Code diff to review"
+        required: true
+      - name: "context"
+        type: "string"
+        description: "Additional context about the change"
+        required: false
+    output:
+      - name: "review"
+        type: "object"
+        description: "Review results with issues and verdict"
+        properties:
+          approve:
+            type: "boolean"
+          issues:
+            type: "array"
+          severity:
+            type: "enum"
+            values: ["critical", "required", "nit"]
+
+requires:
+  - id: "file-system"
+    description: "Ability to read files"
+    capabilities: ["read-file"]
+    optional: false
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go", "rust"]
+    required: true
+  - type: "framework"
+    required: false
+
+quality:
+  - id: "five-axis-review"
+    description: "Review covers correctness, readability, architecture, security, performance"
+    type: "structural"
+    severity: "error"
+  - id: "severity-labels"
+    description: "Issues must have severity labels"
+    type: "behavioral"
+    severity: "warning"
+  - id: "actionable-feedback"
+    description: "Feedback must be actionable"
+    type: "content"
+    severity: "warning"
+
+references:
+  - path: "./references/checklist.md"
+    when: "during-review"
+  - path: "./references/severity-guide.md"
+    when: "categorizing-issues"
+
+tags: ["review", "quality", "code-review", "engineering"]
+category: "engineering"
+difficulty: "intermediate"

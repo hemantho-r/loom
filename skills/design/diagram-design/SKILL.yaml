@@ -1,0 +1,76 @@
+name: "@loom/diagram-design"
+version: "1.0.0"
+description: "Technical diagram creation"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "diagram-design"
+    description: "Create technical diagrams (architecture, flow, sequence)"
+    input:
+      - name: "type"
+        type: "enum"
+        description: "Diagram type"
+        values: ["architecture", "flow", "sequence", "er", "network"]
+        required: true
+      - name: "subject"
+        type: "string"
+        description: "What to diagram"
+        required: true
+    output:
+      - name: "diagram"
+        type: "object"
+        description: "Diagram output (Mermaid/HTML)"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "clarity"
+    type: "behavioral"
+    description: "Diagram is clear and readable"
+    severity: "error"
+  - id: "accuracy"
+    type: "behavioral"
+    description: "Diagram accurately represents system"
+    severity: "error"
+  - id: "consistency"
+    type: "behavioral"
+    description: "Uses consistent notation"
+    severity: "warning"
+  - id: "complexity-budget"
+    type: "behavioral"
+    description: "Diagram stays within the complexity budget for its type or is split"
+    severity: "error"
+  - id: "semantic-pattern"
+    type: "behavioral"
+    description: "Diagram names its semantic patterns before choosing a layout"
+    severity: "warning"
+
+references:
+  - path: "./references/diagram-types.md"
+    when: "for-types"
+  - path: "./references/mermaid-patterns.md"
+    when: "for-mermaid"
+  - path: "./references/semantic-patterns.md"
+    when: "before-choosing-diagram-type"
+  - path: "./references/output-dials.md"
+    when: "before-drawing"
+  - path: "./references/type-catalog.md"
+    when: "when-the-big-five-dont-fit"
+  - path: "./references/type-catalog-2.md"
+    when: "for-domain-diagrams-threat-models-roadmaps-org-charts"
+  - path: "./references/type-catalog-3.md"
+    when: "for-deployment-context-beta-and-matrix-types"
+  - path: "./references/import-redraw.md"
+    when: "when-redrawing-existing-diagrams-or-sites"
+  - path: "./references/diagram-doctor.md"
+    when: "for-environment-and-tooling-diagnostics"
+
+tags: ["design", "diagrams", "architecture", "visualization"]
+category: "design"
+difficulty: "intermediate"

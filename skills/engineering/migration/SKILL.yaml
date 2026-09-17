@@ -1,0 +1,56 @@
+name: "@loom/migration"
+version: "1.0.0"
+description: "Code and data migration workflows"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "migration"
+    description: "Migrate code, data, or dependencies"
+    input:
+      - name: "type"
+        type: "enum"
+        description: "Migration type"
+        values: ["dependency", "api", "data", "framework"]
+        required: true
+      - name: "from"
+        type: "string"
+        description: "Source"
+        required: true
+      - name: "to"
+        type: "string"
+        description: "Target"
+        required: true
+    output:
+      - name: "result"
+        type: "object"
+        description: "Migration result"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "backup"
+    type: "behavioral"
+    description: "Backup before migrating"
+    severity: "error"
+  - id: "incremental"
+    type: "behavioral"
+    description: "Migrate incrementally"
+    severity: "error"
+  - id: "rollback-plan"
+    type: "behavioral"
+    description: "Have rollback plan"
+    severity: "error"
+
+references:
+  - path: "./references/migration-strategies.md"
+    when: "for-strategies"
+
+tags: ["engineering", "migration", "upgrade", "refactoring"]
+category: "engineering"
+difficulty: "advanced"

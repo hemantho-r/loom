@@ -1,0 +1,49 @@
+name: "@loom/handoff"
+version: "1.0.0"
+description: "Context handoff between agents or sessions"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "handoff"
+    description: "Hand off context to another agent or session"
+    input:
+      - name: "context"
+        type: "string"
+        description: "Context to hand off"
+        required: true
+    output:
+      - name: "handoff-doc"
+        type: "object"
+        description: "Structured handoff document"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "completeness"
+    type: "behavioral"
+    description: "Handoff includes all necessary context"
+    severity: "error"
+  - id: "clarity"
+    type: "behavioral"
+    description: "Handoff is clear and unambiguous"
+    severity: "error"
+  - id: "actionable"
+    type: "behavioral"
+    description: "Handoff includes next steps"
+    severity: "warning"
+
+references:
+  - path: "./references/handoff-template.md"
+    when: "for-template"
+  - path: "./references/bad-vs-good-example.md"
+    when: "for-examples"
+
+tags: ["productivity", "handoff", "context", "collaboration"]
+category: "productivity"
+difficulty: "beginner"

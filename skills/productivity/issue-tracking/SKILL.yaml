@@ -1,0 +1,55 @@
+name: "@loom/issue-tracking"
+version: "1.0.0"
+description: "Integration with issue trackers (GitHub, Linear, local)"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "issue-tracking"
+    description: "Create and manage issues in trackers"
+    input:
+      - name: "action"
+        type: "enum"
+        description: "Action to perform"
+        values: ["create", "update", "link", "search"]
+        required: true
+      - name: "tracker"
+        type: "enum"
+        description: "Issue tracker"
+        values: ["github", "linear", "local"]
+        required: true
+    output:
+      - name: "issue"
+        type: "object"
+        description: "Issue details"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "has-description"
+    type: "behavioral"
+    description: "Issue has clear description"
+    severity: "error"
+  - id: "has-acceptance-criteria"
+    type: "behavioral"
+    description: "Issue has acceptance criteria"
+    severity: "warning"
+  - id: "has-labels"
+    type: "behavioral"
+    description: "Issue has appropriate labels"
+    severity: "warning"
+
+references:
+  - path: "./references/github-patterns.md"
+    when: "for-github"
+  - path: "./references/linear-patterns.md"
+    when: "for-linear"
+
+tags: ["productivity", "issues", "github", "linear", "tracking"]
+category: "productivity"
+difficulty: "beginner"

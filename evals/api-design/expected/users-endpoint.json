@@ -1,0 +1,24 @@
+{
+  "versioning": "url",
+  "versioningRationale": "URL path (/v1) keeps versions visible in logs and curl without custom headers",
+  "base": "/v1",
+  "endpoints": [
+    { "method": "GET", "path": "/v1/users", "description": "List users (paginated)" },
+    { "method": "GET", "path": "/v1/users/{id}", "description": "Get one user" },
+    { "method": "POST", "path": "/v1/users", "description": "Create user" }
+  ],
+  "userSchema": {
+    "id": "string",
+    "name": "string",
+    "email": "string",
+    "createdAt": "ISO8601"
+  },
+  "errorEnvelope": {
+    "error": {
+      "code": "VALIDATION_ERROR",
+      "message": "Invalid input",
+      "details": [{ "field": "email", "message": "Invalid email format" }]
+    }
+  },
+  "gatesDemonstrated": ["naming-consistency", "error-handling", "versioning"]
+}

@@ -1,0 +1,54 @@
+name: "@loom/api-design"
+version: "1.0.0"
+description: "API design and interface specification"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "api-design"
+    description: "Design RESTful and GraphQL APIs"
+    input:
+      - name: "type"
+        type: "enum"
+        description: "API type to design"
+        values: ["rest", "graphql", "grpc"]
+        required: true
+      - name: "domain"
+        type: "string"
+        description: "Business domain"
+        required: true
+    output:
+      - name: "spec"
+        type: "object"
+        description: "API specification"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "naming-consistency"
+    type: "behavioral"
+    description: "API naming is consistent"
+    severity: "error"
+  - id: "error-handling"
+    type: "behavioral"
+    description: "Error responses defined"
+    severity: "error"
+  - id: "versioning"
+    type: "behavioral"
+    description: "API versioning strategy"
+    severity: "warning"
+
+references:
+  - path: "./references/rest-patterns.md"
+    when: "for-rest"
+  - path: "./references/graphql-patterns.md"
+    when: "for-graphql"
+
+tags: ["engineering", "api", "design", "rest", "graphql"]
+category: "engineering"
+difficulty: "advanced"

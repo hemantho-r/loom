@@ -1,0 +1,57 @@
+name: "@loom/performance"
+version: "1.0.0"
+description: "Performance optimization and profiling workflow"
+license: "MIT"
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "performance-audit"
+    description: "Performance analysis and optimization"
+    input:
+      - name: "code"
+        type: "string"
+        description: "Code to analyze for performance"
+        required: true
+      - name: "metrics"
+        type: "object"
+        description: "Performance metrics if available"
+        required: false
+    output:
+      - name: "bottlenecks"
+        type: "array"
+        description: "Identified performance bottlenecks"
+      - name: "optimizations"
+        type: "array"
+        description: "Recommended optimizations"
+
+requires:
+  - id: "file-system"
+    capabilities: ["read-file"]
+    optional: false
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go", "rust"]
+    required: true
+  - type: "runtime"
+    values: ["node", "browser", "deno"]
+    required: false
+
+quality:
+  - id: "measure-first"
+    description: "Must measure before optimizing"
+    type: "behavioral"
+    severity: "error"
+  - id: "no-premature-optimization"
+    description: "Don't optimize without evidence"
+    type: "behavioral"
+    severity: "warning"
+  - id: "maintainability"
+    description: "Optimizations must not hurt readability"
+    type: "behavioral"
+    severity: "warning"
+
+tags: ["performance", "optimization", "profiling", "engineering"]
+category: "engineering"
+difficulty: "advanced"

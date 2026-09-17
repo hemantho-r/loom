@@ -1,0 +1,75 @@
+name: "@loom/tdd"
+version: "1.0.0"
+description: "Test-driven development with red-green-refactor cycle"
+license: "MIT"
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "tdd-workflow"
+    description: "Red-green-refactor development cycle"
+    input:
+      - name: "target"
+        type: "string"
+        description: "File or module to develop"
+        required: true
+      - name: "test-framework"
+        type: "enum"
+        values: ["jest", "vitest", "mocha", "pytest"]
+        required: false
+        default: "auto-detect"
+    output:
+      - name: "test-files"
+        type: "file[]"
+        description: "Generated test files"
+      - name: "implementation"
+        type: "file[]"
+        description: "Implementation files"
+      - name: "coverage"
+        type: "number"
+        description: "Test coverage percentage"
+
+requires:
+  - id: "test-runner"
+    description: "Ability to run tests"
+    capabilities: ["execute-command"]
+    optional: false
+  - id: "file-system"
+    description: "Ability to read/write files"
+    capabilities: ["read-file", "write-file"]
+    optional: false
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python"]
+    required: true
+  - type: "framework"
+    values: ["react", "vue", "svelte", "node", "fastapi"]
+    required: false
+  - type: "test-runner"
+    values: ["jest", "vitest", "mocha", "pytest"]
+    required: false
+
+quality:
+  - id: "red-before-green"
+    description: "Must watch test fail before implementing"
+    type: "behavioral"
+    severity: "error"
+  - id: "minimal-implementation"
+    description: "Implementation must be minimal to pass test"
+    type: "behavioral"
+    severity: "warning"
+  - id: "test-each-behavior"
+    description: "Each behavior should have its own test"
+    type: "behavioral"
+    severity: "warning"
+
+references:
+  - path: "./references/anti-patterns.md"
+    when: "during-implementation"
+  - path: "./references/good-tests.md"
+    when: "writing-tests"
+
+tags: ["testing", "tdd", "quality", "engineering"]
+category: "engineering"
+difficulty: "intermediate"

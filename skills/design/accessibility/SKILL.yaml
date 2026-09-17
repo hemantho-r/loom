@@ -1,0 +1,54 @@
+name: "@loom/accessibility"
+version: "1.0.0"
+description: "Accessibility audit and compliance"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "a11y-audit"
+    description: "Comprehensive accessibility audit"
+    input:
+      - name: "files"
+        type: "file[]"
+        description: "Files to audit"
+        required: true
+      - name: "standard"
+        type: "enum"
+        description: "Accessibility standard to check against"
+        values: ["wcag2a", "wcag2aa", "wcag2aaa"]
+        required: false
+    output:
+      - name: "report"
+        type: "object"
+        description: "Accessibility audit report"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "html", "css"]
+    required: true
+
+quality:
+  - id: "wcag-compliance"
+    type: "behavioral"
+    description: "Must check WCAG compliance"
+    severity: "error"
+  - id: "keyboard-navigation"
+    type: "behavioral"
+    description: "Must verify keyboard navigation"
+    severity: "error"
+  - id: "screen-reader"
+    type: "behavioral"
+    description: "Must check screen reader compatibility"
+    severity: "error"
+
+references:
+  - path: "./references/wcag-checklist.md"
+    when: "during-audit"
+  - path: "./references/aria-patterns.md"
+    when: "for-patterns"
+
+tags: ["design", "accessibility", "a11y", "wcag"]
+category: "design"
+difficulty: "advanced"

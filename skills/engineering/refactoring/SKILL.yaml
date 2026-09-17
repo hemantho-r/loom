@@ -1,0 +1,54 @@
+name: "@loom/refactoring"
+version: "1.0.0"
+description: "Safe, incremental code refactoring"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "refactoring"
+    description: "Refactor code safely with tests"
+    input:
+      - name: "type"
+        type: "enum"
+        description: "Refactoring type"
+        values: ["extract", "rename", "move", "inline", "simplify"]
+        required: true
+      - name: "target"
+        type: "string"
+        description: "What to refactor"
+        required: true
+    output:
+      - name: "result"
+        type: "object"
+        description: "Refactored code with tests"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "tests-pass"
+    type: "behavioral"
+    description: "Tests pass before and after"
+    severity: "error"
+  - id: "small-steps"
+    type: "behavioral"
+    description: "Refactor in small steps"
+    severity: "error"
+  - id: "no-behavior-change"
+    type: "behavioral"
+    description: "No behavior change"
+    severity: "error"
+
+references:
+  - path: "./references/refactoring-catalog.md"
+    when: "for-catalog"
+  - path: "./references/smells.md"
+    when: "for-smells"
+
+tags: ["engineering", "refactoring", "clean-code", "patterns"]
+category: "engineering"
+difficulty: "intermediate"

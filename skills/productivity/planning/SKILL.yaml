@@ -1,0 +1,47 @@
+name: "@loom/planning"
+version: "1.0.0"
+description: "Technical planning and task decomposition"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "planning"
+    description: "Break down work into tasks with clear scope"
+    input:
+      - name: "scope"
+        type: "string"
+        description: "What to plan"
+        required: true
+    output:
+      - name: "plan"
+        type: "object"
+        description: "Task breakdown with estimates"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "task-scope"
+    type: "behavioral"
+    description: "Tasks are properly scoped"
+    severity: "error"
+  - id: "dependencies"
+    type: "behavioral"
+    description: "Dependencies identified"
+    severity: "warning"
+  - id: "acceptance-criteria"
+    type: "behavioral"
+    description: "Acceptance criteria defined"
+    severity: "error"
+
+references:
+  - path: "./references/estimation.md"
+    when: "for-estimation"
+
+tags: ["productivity", "planning", "tasks", "estimation"]
+category: "productivity"
+difficulty: "intermediate"

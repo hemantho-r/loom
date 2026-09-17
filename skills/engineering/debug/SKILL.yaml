@@ -1,0 +1,58 @@
+name: "@loom/debug"
+version: "1.0.0"
+description: "Systematic debugging workflow for finding and fixing bugs"
+license: "MIT"
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "debug-workflow"
+    description: "Systematic approach to debugging"
+    input:
+      - name: "symptom"
+        type: "string"
+        description: "Description of the bug or issue"
+        required: true
+      - name: "context"
+        type: "string"
+        description: "Additional context about when the bug occurs"
+        required: false
+    output:
+      - name: "root-cause"
+        type: "string"
+        description: "Identified root cause"
+      - name: "fix"
+        type: "file[]"
+        description: "Files to modify for the fix"
+
+requires:
+  - id: "file-system"
+    capabilities: ["read-file", "write-file"]
+    optional: false
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go", "rust"]
+    required: true
+
+quality:
+  - id: "reproduce-first"
+    description: "Must reproduce the bug before fixing"
+    type: "behavioral"
+    severity: "error"
+  - id: "minimal-fix"
+    description: "Fix should be minimal and targeted"
+    type: "behavioral"
+    severity: "warning"
+  - id: "add-regression-test"
+    description: "Add a test that would have caught this bug"
+    type: "behavioral"
+    severity: "warning"
+
+references:
+  - path: "./references/pressure-test.md"
+    when: "under-time-pressure"
+
+tags: ["debugging", "bug-fix", "engineering"]
+category: "engineering"
+difficulty: "intermediate"

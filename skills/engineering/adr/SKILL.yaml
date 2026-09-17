@@ -1,0 +1,47 @@
+name: "@loom/adr"
+version: "1.0.0"
+description: "Architecture Decision Records"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "adr"
+    description: "Create and manage Architecture Decision Records"
+    input:
+      - name: "decision"
+        type: "string"
+        description: "Decision to document"
+        required: true
+    output:
+      - name: "adr"
+        type: "object"
+        description: "Architecture Decision Record"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "has-context"
+    type: "behavioral"
+    description: "ADR includes context"
+    severity: "error"
+  - id: "has-alternatives"
+    type: "behavioral"
+    description: "ADR considers alternatives"
+    severity: "error"
+  - id: "has-consequences"
+    type: "behavioral"
+    description: "ADR includes consequences"
+    severity: "error"
+
+references:
+  - path: "./references/adr-template.md"
+    when: "for-template"
+
+tags: ["engineering", "architecture", "decisions", "documentation"]
+category: "engineering"
+difficulty: "beginner"

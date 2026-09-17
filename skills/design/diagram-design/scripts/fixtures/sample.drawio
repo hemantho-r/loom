@@ -1,0 +1,18 @@
+<mxfile>
+  <diagram>
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c" value="Client" style="rounded=1" vertex="1" parent="1" />
+        <mxCell id="a" value="API Gateway" style="rounded=1" vertex="1" parent="1" />
+        <mxCell id="d" value="Orders DB" style="shape=cylinder" vertex="1" parent="1" />
+        <mxCell id="s" value="Start" style="shape=ellipse" vertex="1" parent="1" />
+        <mxCell id="ok" value="Stock available?" style="shape=rhombus" vertex="1" parent="1" />
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle" edge="1" parent="1" source="c" target="a" />
+        <mxCell id="e2" value="SQL" style="edgeStyle=orthogonalEdgeStyle" edge="1" parent="1" source="a" target="d" />
+        <mxCell id="e3" value="Yes" style="edgeStyle=orthogonalEdgeStyle" edge="1" parent="1" source="ok" target="d" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

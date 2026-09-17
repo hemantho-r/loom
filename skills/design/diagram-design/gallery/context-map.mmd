@@ -1,0 +1,6 @@
+```mermaid
+flowchart LR
+    Billing[Billing context] -->|shared kernel| Ledger[Ledger context]
+    Shop[Shop context] -->|customer/supplier| Billing
+    Shop -.->|conformist| Auth[Auth context]
+```

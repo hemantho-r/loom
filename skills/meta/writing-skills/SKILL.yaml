@@ -1,0 +1,54 @@
+name: "@loom/writing-skills"
+version: "1.0.0"
+description: "Create new Loom skills"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "writing-skills"
+    description: "Create well-structured Loom skills"
+    input:
+      - name: "name"
+        type: "string"
+        description: "Skill name"
+        required: true
+      - name: "category"
+        type: "enum"
+        description: "Skill category"
+        values: ["engineering", "design", "productivity", "devops", "meta"]
+        required: true
+    output:
+      - name: "skill"
+        type: "object"
+        description: "Created skill files"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript"]
+    required: false
+
+quality:
+  - id: "has-quality-gates"
+    type: "behavioral"
+    description: "Skill has quality gates"
+    severity: "error"
+  - id: "has-anti-rationalization"
+    type: "behavioral"
+    description: "Skill has anti-rationalization"
+    severity: "warning"
+  - id: "has-references"
+    type: "behavioral"
+    description: "Skill has references"
+    severity: "warning"
+
+references:
+  - path: "./references/skill-anatomy.md"
+    when: "for-anatomy"
+  - path: "./references/testing-with-subagents.md"
+    when: "for-testing-discipline-skills"
+
+tags: ["meta", "skill-creation", "loom"]
+category: "meta"
+difficulty: "advanced"

@@ -1,0 +1,47 @@
+name: "@loom/implementation"
+version: "1.0.0"
+description: "Spec-driven implementation workflow"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "implementation"
+    description: "Implement features from specifications"
+    input:
+      - name: "spec"
+        type: "string"
+        description: "Specification to implement"
+        required: true
+    output:
+      - name: "code"
+        type: "object"
+        description: "Implemented code with tests"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "follow-spec"
+    type: "behavioral"
+    description: "Implementation follows spec"
+    severity: "error"
+  - id: "test-coverage"
+    type: "behavioral"
+    description: "Tests cover requirements"
+    severity: "error"
+  - id: "no-overengineering"
+    type: "behavioral"
+    description: "No overengineering"
+    severity: "warning"
+
+references:
+  - path: "./references/coding-standards.md"
+    when: "for-standards"
+
+tags: ["engineering", "implementation", "coding", "spec-driven"]
+category: "engineering"
+difficulty: "intermediate"

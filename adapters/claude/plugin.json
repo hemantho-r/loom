@@ -1,0 +1,144 @@
+{
+  "name": "loom",
+  "description": "Skills woven together — A skill operating system for AI coding agents",
+  "version": "0.1.0",
+  "skills": [
+    {
+      "name": "accessibility",
+      "path": "../../skills/design/accessibility",
+      "description": "Accessibility audit and compliance"
+    },
+    {
+      "name": "adr",
+      "path": "../../skills/engineering/adr",
+      "description": "Architecture Decision Records"
+    },
+    {
+      "name": "api-design",
+      "path": "../../skills/engineering/api-design",
+      "description": "API design and interface specification"
+    },
+    {
+      "name": "brainstorming",
+      "path": "../../skills/productivity/brainstorming",
+      "description": "Structured brainstorming and ideation"
+    },
+    {
+      "name": "ci-cd",
+      "path": "../../skills/devops/ci-cd",
+      "description": "CI/CD pipeline setup and maintenance"
+    },
+    {
+      "name": "debug",
+      "path": "../../skills/engineering/debug",
+      "description": "Systematic debugging workflow for finding and fixing bugs"
+    },
+    {
+      "name": "design-systems",
+      "path": "../../skills/design/design-systems",
+      "description": "Design system creation and maintenance"
+    },
+    {
+      "name": "diagram-design",
+      "path": "../../skills/design/diagram-design",
+      "description": "Technical diagram creation"
+    },
+    {
+      "name": "documentation",
+      "path": "../../skills/engineering/documentation",
+      "description": "Technical documentation creation and maintenance"
+    },
+    {
+      "name": "git-worktrees",
+      "path": "../../skills/engineering/git-worktrees",
+      "description": "Parallel development with git worktrees"
+    },
+    {
+      "name": "grill",
+      "path": "../../skills/productivity/grill",
+      "description": "Socratic grilling interview that forces clarity before building"
+    },
+    {
+      "name": "handoff",
+      "path": "../../skills/productivity/handoff",
+      "description": "Context handoff between agents or sessions"
+    },
+    {
+      "name": "implementation",
+      "path": "../../skills/engineering/implementation",
+      "description": "Spec-driven implementation workflow"
+    },
+    {
+      "name": "issue-tracking",
+      "path": "../../skills/productivity/issue-tracking",
+      "description": "Integration with issue trackers (GitHub, Linear, local)"
+    },
+    {
+      "name": "lifecycle",
+      "path": "../../skills/engineering/lifecycle",
+      "description": "End-to-end delivery lifecycle: DEFINE to SHIP with triage and approval gates"
+    },
+    {
+      "name": "migration",
+      "path": "../../skills/engineering/migration",
+      "description": "Code and data migration workflows"
+    },
+    {
+      "name": "monitoring",
+      "path": "../../skills/devops/monitoring",
+      "description": "Application monitoring and observability"
+    },
+    {
+      "name": "performance",
+      "path": "../../skills/engineering/performance",
+      "description": "Performance optimization and profiling workflow"
+    },
+    {
+      "name": "planning",
+      "path": "../../skills/productivity/planning",
+      "description": "Technical planning and task decomposition"
+    },
+    {
+      "name": "refactoring",
+      "path": "../../skills/engineering/refactoring",
+      "description": "Safe, incremental code refactoring"
+    },
+    {
+      "name": "review",
+      "path": "../../skills/engineering/review",
+      "description": "Multi-axis code review with quality gates"
+    },
+    {
+      "name": "security",
+      "path": "../../skills/engineering/security",
+      "description": "Security review and hardening for applications"
+    },
+    {
+      "name": "subagent-development",
+      "path": "../../skills/engineering/subagent-development",
+      "description": "Subagent-driven development with parallel task execution"
+    },
+    {
+      "name": "tdd",
+      "path": "../../skills/engineering/tdd",
+      "description": "Test-driven development with red-green-refactor cycle"
+    },
+    {
+      "name": "ui-review",
+      "path": "../../skills/design/ui-review",
+      "description": "UI review and component quality"
+    },
+    {
+      "name": "writing-skills",
+      "path": "../../skills/meta/writing-skills",
+      "description": "Create new Loom skills"
+    }
+  ],
+  "commands": [
+    {
+      "name": "loom",
+      "description": "Loom skill system commands",
+      "path": "../../packages/cli/dist/index.js"
+    }
+  ]
+}

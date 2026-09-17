@@ -1,0 +1,167 @@
+# Diagram Design
+
+## Overview
+
+Create clear, accurate technical diagrams for architecture, flows, and sequences.
+
+## When to Use
+
+- Documenting architecture
+- Explaining workflows
+- Visualizing data flow
+- Creating documentation diagrams
+
+## Workflow
+
+### Step 0: Name Semantic Patterns and Set Dials
+
+Before choosing a diagram type:
+
+1. Read `references/semantic-patterns.md` and name the patterns present
+   (request/response, pub/sub, fan-out/fan-in, saga, cache-aside,
+   containment). One diagram per pattern-group — split, don't overload.
+2. Read `references/output-dials.md`, set format/size/detail/audience, and
+   record the dial line. Check the complexity budget for the chosen type.
+
+### Step 1: Choose Diagram Type
+
+Select appropriate type:
+
+- **Architecture**: System components and relationships
+- **Flow**: Decision paths and processes
+- **Sequence**: Interaction between components over time
+- **ER**: Data models and relationships
+- **Network**: Infrastructure and connections
+- **Beyond the five**: swimlane, state, Gantt, timeline, class, C4, mindmap,
+  git graph, journey, quadrant, pie — see `references/type-catalog.md` with
+  one construct, budget, and pitfall each.
+- **Applied patterns**: DFDs, threat models, decision trees, fishbones, org
+  charts, roadmaps, incident timelines, dependency maps, capacity plans —
+  see `references/type-catalog-2.md`.
+- **Frontier**: deployment, context maps, trace matrices, and Mermaid-beta
+  types (each flagged — render before shipping) — see
+  `references/type-catalog-3.md`.
+
+If redrawing an existing draw.io / Mermaid / Excalidraw diagram or pulling
+brand tokens from a site, follow `references/import-redraw.md` first —
+transcribe structure verbatim, then restyle.
+
+### Step 2: Gather Information
+
+Collect what to diagram:
+
+- Components/actors
+- Relationships
+- Data flow
+- Decision points
+
+### Step 3: Choose Tool
+
+Select diagramming tool:
+
+- **Mermaid**: Text-based, version control friendly
+- **draw.io**: Visual, exportable
+- **Excalidraw**: Hand-drawn style
+- **HTML**: Interactive, self-contained
+
+### Step 4: Create Diagram
+
+Build diagram:
+
+- Start with high-level view
+- Add detail progressively
+- Use consistent notation
+
+### Step 5: Validate
+
+Check diagram:
+
+- Accurately represents system
+- Clear and readable
+- Proper labels and legends
+- Within the complexity budget in `references/output-dials.md` — split if over
+- Run `python scripts/self_check.py <file.md>` on any Mermaid blocks and fix
+  reported violations (missing flowchart direction, unlabeled decision edges,
+  over-budget sequence diagrams)
+
+## Mermaid Examples
+
+### Architecture
+```mermaid
+graph TD
+    A[Client] --> B[API Gateway]
+    B --> C[Service A]
+    B --> D[Service B]
+    C --> E[(Database)]
+```
+
+### Sequence
+```mermaid
+sequenceDiagram
+    Client->>API: Request
+    API->>Service: Process
+    Service->>DB: Query
+    DB-->>Service: Result
+    Service-->>API: Response
+    API-->>Client: Result
+```
+
+## Quality Gates
+
+- **clarity**: Diagram is clear and readable
+- **accuracy**: Diagram accurately represents system
+- **consistency**: Uses consistent notation
+- **complexity-budget**: Diagram stays within the complexity budget for its type or is split
+- **semantic-pattern**: Diagram names its semantic patterns before choosing a layout
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "One big diagram shows everything" | One big diagram shows nothing — split by pattern. |
+| "Labels are clutter" | Unlabeled edges are guesses, not documentation. |
+| "I'll skip the budget check" | Over-budget diagrams don't get read. |
+| "A sequence diagram can show this architecture too" | Sequence diagrams show *time-ordered interaction*; architecture diagrams show *structure*. Forcing one pattern into the wrong diagram type hides the thing the reader actually needs. |
+| "The audience will figure out the notation" | Notation you understand because you built it is not notation a first-time reader understands. If it needs a legend you didn't provide, it needs a different diagram. |
+| "I'll add every component I know about, more detail is more accurate" | More detail is only more accurate if the reader needs it. A diagram sized for "explain the auth flow to a new hire" and one sized for "audit every service dependency" are different diagrams. |
+| "Mermaid rendered without errors, so it's correct" | Mermaid renders syntactically valid but semantically wrong diagrams without complaint — check it against `scripts/self_check.py`, not just "did it render." |
+| "This is basically the same as the last diagram, I'll copy it" | Copying a diagram from a different pattern (e.g. request/response reused for pub/sub) carries over an implied semantic that doesn't hold. |
+
+## Red Flags — STOP and Reconsider
+
+If you catch yourself thinking or seeing:
+- Choosing a diagram type before naming the semantic pattern (Step 0 skipped)
+- A diagram with more than ~15-20 nodes and no split
+- An edge with no label on anything but the most self-evident connection
+- "I'll just eyeball whether it's over budget" instead of checking `references/output-dials.md`
+- Reusing a diagram type because it's familiar, not because it fits the pattern
+- Shipping a frontier/beta-flagged Mermaid type without actually rendering it first
+
+**All of these mean: stop, re-check the pattern and type choice against the references, then continue.**
+
+## Self-Critique Scoring
+
+Before publishing the diagram, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Patterns** | Are the semantic patterns named before the layout? | 1-5 |
+| **Dials** | Are format/size/detail/audience recorded? | 1-5 |
+| **Budget** | Is the diagram within budget, or explicitly split? | 1-5 |
+| **Labels** | Is every decision edge labeled, every key edge protocoled? | 1-5 |
+| **Self-check** | Does `scripts/self_check.py` pass on the output? | 1-5 |
+| **Split test** | Would covering the pattern names still let a reader reconstruct behavior? | 1-5 |
+
+**Minimum passing score:** 30/30
+
+## References
+
+- [diagram-types.md](references/diagram-types.md) — per-type guidance, wrong-choice signals, pitfalls
+- [mermaid-patterns.md](references/mermaid-patterns.md) — concrete valid Mermaid for every type
+- [semantic-patterns.md](references/semantic-patterns.md) — behavior-first patterns independent of layout
+- [output-dials.md](references/output-dials.md) — the four dials and complexity budgets
+- [type-catalog.md](references/type-catalog.md) — 12 further types with construct, budget, pitfall
+- [type-catalog-2.md](references/type-catalog-2.md) — 14 applied domain patterns with construct, budget, pitfall
+- [type-catalog-3.md](references/type-catalog-3.md) — 8 frontier types (deployment, context map, beta-flagged) with renderer checks
+- [import-redraw.md](references/import-redraw.md) — transcribing draw.io/Mermaid/Excalidraw and site brand extraction
+- [diagram-doctor.md](references/diagram-doctor.md) — environment and tooling diagnostic checks

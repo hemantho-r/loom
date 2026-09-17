@@ -1,0 +1,173 @@
+# Test-Driven Development (TDD)
+
+## Overview
+
+TDD is the red → green → refactor loop. Write a failing test first, watch it fail for the right reason, write minimal code to pass, watch it pass, then refactor.
+
+**Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
+
+**The Iron Law:**
+
+```
+NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+```
+
+Wrote code before the test? Delete it. Don't keep it "as reference," don't peek at it while writing the test, don't adapt it afterward — delete means delete, then implement fresh from the test.
+
+## When to Use
+
+**Always:**
+- New features
+- Bug fixes
+- Refactoring
+- Behavior changes
+
+**Exceptions (ask your human partner):**
+- Throwaway prototypes
+- Generated code
+- Configuration files
+
+Thinking "skip it just this once"? That thought is the rationalization the [Anti-Rationalization](#anti-rationalization) table below exists for. Stop and read it.
+
+### Step 0: Identify Test Seams & Vertical Slices
+
+- **Establish the Seam:** Confirm the public test boundary ("seam") with your partner or spec before writing any test. Test against public interfaces (API endpoint, exported function, CLI command), not private internal implementation details.
+- **Vertical Slicing:** Drive behavior using end-to-end vertical slices (exercising input -> logic -> state/persistence together) rather than building disconnected horizontal layers (e.g. database schema first, then ORM models, then controllers).
+
+### Step 1: Red (Write Failing Test)
+
+Write one minimal test showing what should happen across the identified seam.
+
+**Requirements:**
+- One behavior per test
+- Clear name describing expected contract
+- Real code across the seam (no mocks unless interfacing with external network/hardware)
+
+### Step 2: Verify Red (Watch It Fail)
+
+**Mandatory. Never skip.** Run the test and check the failure itself, not just that it failed:
+
+- **Fails for the right reason** (feature genuinely missing) → proceed to Green.
+- **Passes immediately** → you're testing existing behavior, or the test doesn't exercise the code path it claims to. Fix the test before writing any implementation.
+- **Errors instead of failing** (typo, import error, wrong setup) → fix the error and re-run until it fails cleanly on the missing behavior, not on a mistake in the test itself.
+
+### Step 3: Green (Implement)
+
+Write the simplest code to make the test pass.
+
+- Don't add features
+- Don't refactor other code
+- Don't "improve" beyond the test
+
+### Step 4: Verify Green (Watch It Pass)
+
+**Mandatory.** Run the full suite, not just the new test:
+
+- **New test passes, everything else still passes** → proceed to Refactor.
+- **New test still fails** → fix the implementation, not the test. Changing the test to match broken code is not TDD.
+- **A different test now fails** → you broke something. Fix it now, before refactoring — don't stack a second unverified change on top of the first.
+
+### Step 5: Refactor
+
+After green only:
+- Remove duplication
+- Improve names
+- Extract helpers
+
+Keep tests green. Don't add behavior.
+
+### Repeat
+
+Next failing test for next behavior.
+
+## Quality Gates
+
+- **red-before-green**: Must watch test fail before implementing
+- **minimal-implementation**: Implementation must be minimal to pass test
+- **test-each-behavior**: Each behavior should have its own test
+
+## Self-Critique Scoring
+
+Before submitting code, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Coverage** | Does every behavior have a test? | 1-5 |
+| **Clarity** | Is the test name clear? | 1-5 |
+| **Independence** | Are tests independent? | 1-5 |
+| **Minimalism** | Is implementation minimal? | 1-5 |
+| **Regression** | Would these tests catch regressions? | 1-5 |
+| **Readability** | Is the test readable? | 1-5 |
+
+**Minimum passing score:** 30/30
+
+## Worked Example: Bug Fix
+
+**Bug report:** the signup form accepts an empty email address.
+
+**Red**
+```typescript
+test('rejects empty email', async () => {
+  const result = await submitForm({ email: '' });
+  expect(result.error).toBe('Email required');
+});
+```
+
+**Verify Red**
+```
+$ npm test signup.test.ts
+FAIL  signup.test.ts
+  ✕ rejects empty email
+    expected result.error to be 'Email required', got undefined
+```
+Fails for the right reason — the check doesn't exist yet, not a typo. Proceed.
+
+**Green**
+```typescript
+function submitForm(data: FormData) {
+  if (!data.email?.trim()) {
+    return { error: 'Email required' };
+  }
+  // ...existing submit logic
+}
+```
+
+**Verify Green**
+```
+$ npm test signup.test.ts
+PASS  signup.test.ts (12 tests, 12 passed)
+```
+
+**Refactor:** if the next bug report is "empty name accepted," extract the pattern into a shared `requireNonEmpty(field, label)` helper once there are two call sites — not before.
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "Too simple to test" | Simple code breaks. The test takes 30 seconds to write. |
+| "I'll test after" | Tests written after pass immediately, which proves nothing — you never watched them fail, so you never proved they can catch the bug they're meant to catch. |
+| "I already manually tested it" | Manual testing is ad-hoc: no record of what you covered, no way to re-run it when the code changes next week. |
+| "TDD will slow me down" | TDD is the pragmatic path — it catches bugs before commit and lets you refactor without fear. Skipping it trades a 30-second test for a debugging session later. |
+| "The fix is obvious, I don't need a test to prove it" | Obvious fixes are exactly the ones that silently don't fix the reported bug — the test is what tells you whether "obvious" was actually correct. |
+| "I'll keep this working draft and write tests around it" | You'll adapt the draft to fit the tests, not write tests that constrain the design. That's testing after, wearing a TDD costume. |
+| "This part of the codebase has no tests anyway" | You're touching it now — add the test now. Untested legacy code is the reason it's risky to change; don't extend that risk. |
+| "The test is hard to write, so I'll test it manually instead" | Hard to test usually means the design is hard to use — that's a signal to simplify the interface, not to skip testing it. |
+| "I already spent an hour on this implementation, deleting it feels wasteful" | Sunk cost. The hour is gone either way; keeping untested code you can't trust is the actual waste. |
+| "This bug fix is small, TDD is overkill for one line" | One-line fixes are exactly where a single missed edge case ships silently — the test costs less than the incident it prevents. |
+
+## Red Flags — STOP and Start Over
+
+- You wrote implementation code before the test existed
+- The test passed the first time you ran it
+- You can't state, in one sentence, why the test failed before you fixed it
+- You're editing the test to match what the code currently does
+- You're thinking "I'll add the test right after this"
+- You're keeping unverified code "as reference" while writing the test
+- You're about to skip refactor because "it works, ship it"
+
+**All of these mean: stop, delete the untested code, restart from Red.**
+
+## References
+
+- [anti-patterns.md](references/anti-patterns.md) - Common testing anti-patterns
+- [good-tests.md](references/good-tests.md) - Characteristics of good tests

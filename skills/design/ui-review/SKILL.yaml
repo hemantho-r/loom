@@ -1,0 +1,52 @@
+name: "@loom/ui-review"
+version: "1.0.0"
+description: "UI review and component quality"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "ui-review"
+    description: "Review UI components for quality, consistency, and best practices"
+    input:
+      - name: "components"
+        type: "file[]"
+        description: "Component files to review"
+        required: true
+    output:
+      - name: "report"
+        type: "object"
+        description: "UI review report with issues and suggestions"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript"]
+    required: true
+  - type: "framework"
+    values: ["react", "vue", "svelte", "angular"]
+    required: true
+
+quality:
+  - id: "check-accessibility"
+    type: "behavioral"
+    description: "Must check for accessibility issues"
+    severity: "error"
+  - id: "check-consistency"
+    type: "behavioral"
+    description: "Must check for design consistency"
+    severity: "warning"
+  - id: "check-responsiveness"
+    type: "behavioral"
+    description: "Must check for responsive design"
+    severity: "warning"
+
+references:
+  - path: "./references/accessibility-checklist.md"
+    when: "during-review"
+  - path: "./references/component-patterns.md"
+    when: "for-patterns"
+
+tags: ["design", "ui", "review", "components"]
+category: "design"
+difficulty: "intermediate"

@@ -1,0 +1,160 @@
+---
+description: "Loom debug — Systematic debugging workflow for finding and fixing bugs"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
+alwaysApply: false
+---
+
+# Debugging Workflow
+
+## Overview
+
+A systematic approach to finding and fixing bugs. The goal is to understand the problem before attempting a fix.
+
+## When to Use
+
+- When a test fails unexpectedly
+- When behavior doesn't match expectations
+- When an error occurs in production
+- When investigating performance issues
+
+## Workflow
+
+### Step 1: Reproduce
+
+Before fixing, reproduce the bug consistently.
+
+- Write a failing test that demonstrates the bug
+- If you can't reproduce it, you can't verify the fix
+- Document the exact steps to reproduce
+
+### Step 2: Isolate
+
+Narrow down where the bug occurs.
+
+- Add logging or breakpoints
+- Use binary search through the code
+- Identify the smallest possible reproduction case
+
+**Backward call-stack tracing:** when a bad value shows up somewhere, don't guess where it came from — trace it backward. Find where the value is used incorrectly, then walk up the call stack one frame at a time, logging or inspecting the value at each frame, until you find the frame where it was still correct. The bug is between that frame and the one after it. This is slower than guessing but never wrong; guessing "it's probably the parser" and being wrong costs more time than tracing would have.
+
+**Intermittent failure?** Don't reach for `sleep()`/timeout-based waiting to "fix" a race — that hides the race, it doesn't resolve it. Use condition-based waiting instead: poll for the actual condition you need, not a fixed delay.
+
+```typescript
+// Before: flaky - guesses how long is "enough"
+await new Promise((r) => setTimeout(r, 500));
+const result = getResult();
+
+// After: waits for the actual condition, no guessing
+async function waitFor<T>(check: () => T | undefined, timeoutMs = 2000): Promise<T> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    const value = check();
+    if (value !== undefined) return value;
+    await new Promise((r) => setTimeout(r, 10));
+  }
+  throw new Error('waitFor timed out');
+}
+const result = await waitFor(() => getResult());
+```
+
+A fixed `sleep()` either wastes time (waits longer than needed) or is still flaky under load (doesn't wait long enough) — condition-based waiting does neither.
+
+### Step 3: Understand
+
+Determine the root cause.
+
+- Why does this happen?
+- What conditions trigger it?
+- Is this a new bug or a long-standing issue?
+
+**3+ failed fix attempts?** Stop trying variations of the same fix. That many failures means your model of the root cause is wrong, not that the fix needs one more tweak. Go back to Step 2 and re-isolate — question the architecture the bug lives in, not the patch you keep adjusting.
+
+### Step 4: Fix
+
+Implement the minimal fix.
+
+- Fix the root cause, not the symptom
+- Don't change unrelated code
+- Keep the fix simple and focused
+
+**Defense-in-depth:** once you know the root cause, check whether the same bad state could also enter through a different path (a second caller, a different API route, a background job). Fixing only the path you found leaves the others exposed to the identical bug. Add validation at the boundary where the bad state actually originates, not only a patch at the one call site you happened to trace.
+
+### Step 5: Verify
+
+Confirm the fix works.
+
+- Run the failing test - it should pass
+- Run the full test suite - nothing else should break
+- Test edge cases
+
+### Step 6: Prevent
+
+Add a regression test.
+
+- Write a test that would have caught this bug
+- Document what was learned
+- Consider if similar bugs could exist elsewhere
+
+## Quality Gates
+
+- **reproduce-first**: Must reproduce the bug before fixing
+- **minimal-fix**: Fix should be minimal and targeted
+- **add-regression-test**: Add a test that would have caught this bug
+
+## Self-Critique Scoring
+
+Before closing the bug, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Reproduction** | Can anyone re-trigger the bug from my repro steps? | 1-5 |
+| **Isolation** | Did I narrow to the smallest failing case? | 1-5 |
+| **Root cause** | Did I fix the cause, with evidence, not the symptom? | 1-5 |
+| **Minimalism** | Is unrelated code untouched? | 1-5 |
+| **Verification** | Do the repro test *and* full suite pass? | 1-5 |
+| **Prevention** | Would the new regression test have caught this? | 1-5 |
+
+**Minimum passing score:** 30/30
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "I know what the bug is" | You might be wrong. Reproduce first — a hypothesis isn't evidence. |
+| "It's just a quick fix" | Quick fixes become permanent problems the moment they ship without a regression test. |
+| "I'll add tests later" | Later never comes. Test now, while you still remember the exact repro steps. |
+| "It only happens sometimes" | "Sometimes" means it will happen in production, at the worst time, and you'll have lost the context you have right now. |
+| "Adding a try/catch will stop the crash" | A caught-and-swallowed error hides the bug, it doesn't fix it — the bad state still exists, it just fails silently somewhere else later. |
+| "This retry/timeout increase makes the symptom go away" | Masking a race condition or timeout isn't fixing it — see Step 2's condition-based-waiting note. If you can't explain why the retry fixes it, it doesn't. |
+| "I've tried 3 fixes, the 4th variation should work" | Three failed attempts means your model of the cause is wrong — see the Step 3 escalation rule. A fourth guess in the same direction won't fix a wrong model. |
+| "This bug only shows up in this one place, I'll patch it here" | Check for defense-in-depth (Step 4) — the same bad state may enter through another path you haven't traced yet. |
+| "Root-causing this will take too long, ship the workaround" | The workaround ships the same bug under a different name; someone re-debugs it later with less context than you have right now. |
+| "I don't need to trace the whole call stack, I can guess where it broke" | Guessing wrong costs more than tracing — see backward call-stack tracing in Step 2. |
+
+## Red Flags — STOP and Reconsider
+
+- You're about to add a try/catch to hide the error instead of understanding it
+- You're increasing a timeout or adding a retry without knowing why it fixes anything
+- You've changed the same function 3+ times chasing the same bug
+- You're fixing the bug at the call site instead of where the bad state originates
+- You can't reproduce the bug but you're implementing a fix anyway
+- You're about to skip the regression test because "the fix obviously works"
+
+## Common Patterns
+
+| Symptom | Likely Cause |
+|---------|--------------|
+| Intermittent failure | Race condition or timing issue |
+| Works locally, fails in CI | Environment difference |
+| Works in one browser, not another | Browser compatibility |
+| Memory grows over time | Memory leak |
+| Slow over time | Resource leak |
+
+## References
+
+- [pressure-test.md](references/pressure-test.md) - A worked scenario for staying systematic under production-incident time pressure

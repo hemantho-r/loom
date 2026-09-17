@@ -1,0 +1,169 @@
+---
+description: "Loom adr — Architecture Decision Records"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
+alwaysApply: false
+---
+
+# Architecture Decision Records
+
+## Overview
+
+Document architectural decisions with context, alternatives, and consequences.
+
+## When to Use
+
+- Making significant technical decisions
+- Choosing between technologies
+- Establishing patterns or conventions
+- Onboarding new team members
+
+## Workflow
+
+### Step 1: Context
+
+Describe the situation:
+
+- What is the problem?
+- What are the constraints?
+- What are the requirements?
+
+### Step 2: Decision
+
+State the decision clearly:
+
+- What was decided?
+- When was it decided?
+- Who was involved?
+
+### Step 3: Alternatives
+
+Consider alternatives:
+
+- What other options were evaluated?
+- Why were they rejected?
+
+### Step 4: Consequences
+
+Document consequences:
+
+- What are the benefits?
+- What are the trade-offs?
+- What are the risks?
+
+### Step 5: Record
+
+Create the ADR file:
+
+```
+docs/adr/0001-use-typescript.md
+```
+
+## ADR Template
+
+```markdown
+# ADR [Number]: [Title]
+
+## Status
+
+[Proposed | Accepted | Deprecated | Superseded]
+
+## Context
+
+[What is the issue that we're seeing that motivates this decision?]
+
+## Decision
+
+[What is the change that we're proposing and/or doing?]
+
+## Alternatives
+
+[What other options were considered?]
+
+## Consequences
+
+### Positive
+- [Benefit 1]
+- [Benefit 2]
+
+### Negative
+- [Trade-off 1]
+- [Trade-off 2]
+
+### Risks
+- [Risk 1]
+- [Risk 2]
+```
+
+## Numbering
+
+- Sequential: 0001, 0002, 0003...
+- Descriptive title: Use-PostgreSQL-for-Database
+
+## Quality Gates
+
+- **has-context**: ADR includes context
+- **has-alternatives**: ADR considers alternatives
+- **has-consequences**: ADR includes consequences
+
+## Worked Example: Minimal but Complete
+
+**Decision:** use PostgreSQL instead of MongoDB for the orders service.
+
+**Weak (fails has-alternatives, has-consequences):**
+> We're using Postgres for orders because it's relational and orders have relationships.
+
+**Complete:**
+> **Context:** Orders reference customers, line items, and payments — three entities with foreign-key relationships and a hard requirement for transactional consistency across an order's line items and its payment record.
+>
+> **Decision:** Use PostgreSQL for the orders service database.
+>
+> **Alternatives:** MongoDB — rejected because multi-document transactions across orders/line-items/payments would require the transactions API (added complexity) for a workload that's inherently relational. DynamoDB — rejected because our access patterns include ad-hoc reporting queries across order history, which fights DynamoDB's single-table design.
+>
+> **Consequences:** Positive — foreign keys enforce referential integrity at the database level, ACID transactions across the three entities are free. Negative — horizontal scaling requires more operational work than a managed document store. Risk — team has less production Postgres experience than MongoDB; budget onboarding time.
+
+The weak version states a conclusion with no evidence anyone could later question or revisit. The complete version lets a future engineer evaluate whether the original reasoning still holds when circumstances change.
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "We'll document it later" | Decisions without recorded context are meaningless within a quarter — "later" means from memory, and memory reconstructs justification, not history. |
+| "Everyone knows this" | Everyone on the team right now knows this. New hires in six months won't, and neither will you in two years. |
+| "It's obvious why" | It's obvious until requirements change and someone needs to know whether the original reasoning still applies — obviousness doesn't survive turnover. |
+| "This decision is small, doesn't need a full ADR" | Small decisions compound — a dozen undocumented "small" choices are how a codebase becomes unexplainable. Use the quick template, not none. |
+| "We didn't seriously consider alternatives, we just knew" | "We just knew" is unfalsifiable to a future reader — write down what you'd have chosen if the obvious option weren't available, even briefly. |
+| "The decision might change soon, why document it" | Documenting *now* is exactly what lets a future ADR say "supersedes ADR-0004" with a clear before/after — undocumented decisions can't be superseded, only silently contradicted. |
+| "Consequences are all positive, why list risks" | Every real decision has a trade-off; if you can't name one, you haven't looked hard enough for what you're giving up. |
+| "We'll fill in the status later" | An ADR stuck at "Proposed" after the decision shipped is actively misleading — update status the same day it's decided. |
+
+## Red Flags — STOP and Reconsider
+
+- The ADR states a decision with no context section — a future reader can't tell if it still applies
+- Zero alternatives are listed, or alternatives are listed with no rejection reason
+- Consequences only list benefits — no trade-offs or risks named
+- The ADR is still "Proposed" after the decision was actually implemented
+- You're writing the ADR from memory weeks after the decision, reconstructing justification rather than recording it
+
+## Self-Critique Scoring
+
+Before filing the ADR, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Context** | Could a new hire understand why this mattered? | 1-5 |
+| **Decision** | Is the decision stated in one unambiguous sentence? | 1-5 |
+| **Alternatives** | Are at least two alternatives recorded with rejection reasons? | 1-5 |
+| **Consequences** | Are benefits, trade-offs, *and* risks all present? | 1-5 |
+| **Status** | Is the status (Proposed/Accepted/Deprecated/Superseded) current? | 1-5 |
+| **Brevity** | Is it short enough someone will actually read it? | 1-5 |
+
+**Minimum passing score:** 30/30
+
+## References
+
+- [adr-template.md](references/adr-template.md) — standard and quick ADR templates

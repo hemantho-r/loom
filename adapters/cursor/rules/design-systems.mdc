@@ -1,0 +1,276 @@
+---
+description: "Loom design-systems — Design system creation and maintenance"
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+alwaysApply: false
+---
+
+# Design Systems
+
+## Overview
+
+Create and maintain design systems with tokens, components, and documentation.
+
+## When to Use
+
+- Starting a new design system
+- Auditing existing design systems
+- Documenting component APIs
+- Publishing design system packages
+
+## Workflow
+
+### Step 0: Choose Genre, Theme, and Macrostructure
+
+Before tokens or components, pick the visual direction:
+
+1. Read `references/themes.md`, choose a genre then a theme. Record it.
+2. Read `references/macrostructures.md`, choose a layout skeleton. Record it.
+3. Check the rotation log (last two pairs used in this project) — the new
+   pair must differ unless the brand mandates otherwise.
+
+Component-scope work (a single component with no page context) may defer the
+macrostructure choice, but the theme choice is still required.
+
+### Step 1: Initialize
+
+Set up design system structure:
+
+```
+design-system/
+├── tokens/
+│   ├── colors.ts
+│   ├── spacing.ts
+│   ├── typography.ts
+│   └── index.ts
+├── components/
+│   ├── Button/
+│   │   ├── Button.tsx
+│   │   ├── Button.stories.tsx
+│   │   ├── Button.test.tsx
+│   │   └── index.ts
+│   └── index.ts
+├── styles/
+│   ├── global.css
+│   └── reset.css
+└── docs/
+    └── getting-started.md
+```
+
+### Step 2: Define Tokens
+
+Create design tokens:
+
+```typescript
+// tokens/colors.ts
+export const colors = {
+  primary: {
+    50: '#eff6ff',
+    500: '#3b82f6',
+    900: '#1e3a8a',
+  },
+  neutral: {
+    50: '#f8fafc',
+    500: '#64748b',
+    900: '#0f172a',
+  },
+};
+```
+
+### Step 3: Build Components
+
+Create reusable components:
+
+```typescript
+// components/Button/Button.tsx
+interface ButtonProps {
+  variant: 'primary' | 'secondary';
+  size: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+}
+```
+
+### Step 4: Document
+
+Document component APIs:
+
+```markdown
+# Button
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | 'primary' \| 'secondary' | 'primary' | Button variant |
+| size | 'sm' \| 'md' \| 'lg' | 'md' | Button size |
+```
+
+### Step 5: Test
+
+Write tests and stories:
+
+- Unit tests for component logic
+- Visual regression tests
+- Accessibility tests
+- Storybook stories
+
+### Step 6: Publish
+
+Publish design system:
+
+- Version properly (semver)
+- Changelog maintained
+- Published to registry
+
+### Step 7: Slop Test Before Emitting UI
+
+Run `references/slop-test.md` end to end. Zero `error` failures required to
+emit. Log the pass with the theme + macrostructure pair, e.g.
+`slop-test: pass (Editorial/Ink & Paper + editorial-stack)`.
+
+## Quality Gates
+
+- **token-coverage**: Design tokens cover all use cases
+- **component-documentation**: All components documented
+- **versioning**: Proper versioning strategy
+- **slop-test**: Must pass the slop-test checklist before emitting UI
+- **theme-rotation**: Must select an explicit theme and macrostructure, rotating across runs
+
+## Diversification Rules
+
+Prevent repetitive designs:
+
+### Theme Rotation
+
+Rotate themes across projects:
+
+- Project A: Modern Minimal
+- Project B: Editorial
+- Project C: Bold & Vibrant
+
+### Pattern Variation
+
+Use different patterns for similar components:
+
+- Button: Filled, Outlined, Ghost
+- Card: Elevated, Outlined, Filled
+- Input: Underlined, Outlined, Filled
+
+### Color Palette Selection
+
+Choose different palettes:
+
+- Monochromatic
+- Analogous
+- Complementary
+- Triadic
+
+## Brand Onboarding
+
+### Extract Brand from URL
+
+Requires the `web-fetch` capability (declared optional in SKILL.yaml).
+Follow the "From a website URL" procedure in the `@loom/diagram-design`
+skill's `import-redraw.md` reference — fetch, extract, emit `brand.ts`,
+record source URL and date — then derive tokens as below.
+
+### Manual Brand Setup
+
+```typescript
+// brand.ts
+export const brand = {
+  colors: {
+    primary: '#your-color',
+    secondary: '#your-color',
+  },
+  fonts: {
+    heading: 'Your Font',
+    body: 'Your Font',
+  },
+  spacing: {
+    unit: '8px',
+  },
+};
+```
+
+### Brand to Tokens
+
+```typescript
+// tokens/color-utils.ts
+// Lightens (positive percent) or darkens (negative percent) a hex color by
+// shifting each RGB channel toward white/black, clamped to [0, 255].
+export function adjustBrightness(hex: string, percent: number): string {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const channels = [num >> 16, (num >> 8) & 0xff, num & 0xff].map((c) => {
+    const shifted = c + (percent / 100) * 255;
+    return Math.max(0, Math.min(255, Math.round(shifted)));
+  });
+  return `#${channels.map((c) => c.toString(16).padStart(2, '0')).join('')}`;
+}
+
+// tokens/brand.ts
+import { brand } from './brand';
+import { adjustBrightness } from './color-utils';
+
+export const tokens = {
+  colors: {
+    primary: {
+      50: adjustBrightness(brand.colors.primary, 50),
+      500: brand.colors.primary,
+      900: adjustBrightness(brand.colors.primary, -50),
+    },
+  },
+};
+```
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "We'll extract tokens later" | Design debt is technical debt. |
+| "Our brand is simple" | Simple brands still need tokens. |
+| "Just use the defaults" | Defaults don't match your brand. |
+| "It's just one component, I'll hardcode this color inline" | One inline hex value today is ten inconsistent hex values across the codebase in six months — extend the token scale instead. |
+| "This spacing looks a pixel off from the token, I'll use a raw value" | If the token is wrong, fix the token (and every component that already uses it benefits) — a local override just hides the drift. |
+| "The design system doesn't have a token for this, I'll invent one locally" | A locally-invented value is invisible to the next person auditing the token scale. Add it to `tokens/` even if it's used once. |
+| "This component is a one-off, it doesn't need to follow the system" | One-offs accumulate. The next "one-off" copies this one as precedent, and now there are two undocumented patterns. |
+| "The slop-test is just a formality for a small change" | The checklist exists because "small change" is exactly where token/theme drift gets waved through unreviewed. |
+| "I'll skip the theme rotation check, this project is different" | "This project is different" is true of every project — the rotation rule exists specifically so that reasoning doesn't produce the same three themes every time. |
+
+## Red Flags — STOP and Reconsider
+
+If you catch yourself thinking or seeing:
+- A raw hex color, px value, or font name in component code instead of a token reference
+- A component style that only matches the design system "close enough"
+- Skipping Step 0 (theme/macrostructure selection) because "the last one will do"
+- Publishing without a changelog entry or version bump
+- A component with no Storybook story or accessibility test
+- Copy-pasting a one-off style from another component instead of extending the shared token
+
+**All of these mean: stop, extend the token/theme system properly, then continue.**
+
+## Self-Critique Scoring
+
+Before emitting UI, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Theme** | Is the theme explicit and rotation-logged? | 1-5 |
+| **Macro** | Is the macrostructure chosen for the content, not habit? | 1-5 |
+| **Tokens** | Is every color/spacing value a token, not a literal? | 1-5 |
+| **Slop test** | Did the slop-test checklist pass with zero error failures? | 1-5 |
+| **Docs** | Is every component's API documented? | 1-5 |
+| **Versioning** | Is the change versioned per semver with a changelog entry? | 1-5 |
+
+**Minimum passing score:** 30/30
+
+## References
+
+- [tokens.md](references/tokens.md) — color, spacing, typography, shadow, border tokens
+- [component-api.md](references/component-api.md) — component structure and documentation template
+- [themes.md](references/themes.md) — genre and theme catalog with rotation rule
+- [macrostructures.md](references/macrostructures.md) — page-layout catalog with rotation rule
+- [slop-test.md](references/slop-test.md) — pre-emit quality checklist and scoring

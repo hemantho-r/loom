@@ -1,0 +1,50 @@
+name: "@loom/ci-cd"
+version: "1.0.0"
+description: "CI/CD pipeline setup and maintenance"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "ci-cd"
+    description: "Set up and maintain CI/CD pipelines"
+    input:
+      - name: "action"
+        type: "enum"
+        description: "Action to perform"
+        values: ["init", "test", "deploy", "monitor"]
+        required: true
+    output:
+      - name: "result"
+        type: "object"
+        description: "Pipeline result"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "tests-pass"
+    type: "behavioral"
+    description: "Tests pass before deploy"
+    severity: "error"
+  - id: "security-scan"
+    type: "behavioral"
+    description: "Security scan passes"
+    severity: "error"
+  - id: "rollback-plan"
+    type: "behavioral"
+    description: "Rollback plan exists"
+    severity: "warning"
+
+references:
+  - path: "./references/github-actions.md"
+    when: "for-github"
+  - path: "./references/gitlab-ci.md"
+    when: "for-gitlab"
+
+tags: ["devops", "ci-cd", "pipeline", "automation"]
+category: "devops"
+difficulty: "intermediate"

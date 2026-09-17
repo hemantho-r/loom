@@ -1,0 +1,12 @@
+```mermaid
+flowchart TD
+    subgraph Prod["Prod — AWS eu-west-1"]
+        subgraph Node1["EC2 app-01"]
+            API[API Service]
+        end
+        subgraph Node2["RDS"]
+            DB[(Orders DB)]
+        end
+    end
+    API -->|SQL, TLS| DB
+```

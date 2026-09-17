@@ -1,0 +1,21 @@
+{
+  "name": "@loom/schema",
+  "version": "0.1.0",
+  "description": "JSON schemas for Loom skill definitions",
+  "type": "module",
+  "main": "skill.schema.json",
+  "exports": {
+    ".": "./skill.schema.json",
+    "./skill.schema.json": "./skill.schema.json",
+    "./capability.schema.json": "./capability.schema.json",
+    "./context.schema.json": "./context.schema.json",
+    "./quality-gate.schema.json": "./quality-gate.schema.json"
+  },
+  "files": [
+    "*.schema.json"
+  ],
+  "scripts": {
+    "build": "echo 'No build needed - schema package ships raw JSON'",
+    "lint": "echo 'No TypeScript to lint'"
+  }
+}

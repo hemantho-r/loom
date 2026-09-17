@@ -1,0 +1,128 @@
+# Accessibility Audit
+
+## Overview
+
+Comprehensive accessibility audit ensuring WCAG compliance and inclusive design.
+
+## When to Use
+
+- Before launching public-facing websites
+- During accessibility compliance reviews
+- When integrating third-party components
+- For regulatory compliance (ADA, Section 508)
+
+## Workflow
+
+### Step 1: Perceivable
+
+Check content is perceivable:
+
+- [ ] Text alternatives for non-text content
+- [ ] Captions for audio/video
+- [ ] Content can be presented in different ways
+- [ ] Content is easy to see and hear
+
+### Step 2: Operable
+
+Check interface is operable:
+
+- [ ] All functionality available from keyboard
+- [ ] Users have enough time to read content
+- [ ] Content doesn't cause seizures
+- [ ] Users can navigate and find content
+
+### Step 3: Understandable
+
+Check information is understandable:
+
+- [ ] Text is readable and understandable
+- [ ] Pages appear and operate predictably
+- [ ] Users are helped to avoid and correct mistakes
+
+### Step 4: Robust
+
+Check content is robust:
+
+- [ ] Compatible with current and future tools
+- [ ] Valid, semantic HTML
+- [ ] ARIA used correctly
+
+### Step 5: Testing
+
+Run automated and manual tests:
+
+- [ ] Automated tools (axe, Lighthouse)
+- [ ] Keyboard-only navigation
+- [ ] Screen reader testing (NVDA, VoiceOver)
+- [ ] Color contrast analyzers
+
+### Step 6: Report
+
+Generate accessibility report:
+
+- WCAG level achieved (A, AA, AAA)
+- Issues found with severity
+- Remediation recommendations
+
+## Quality Gates
+
+- **wcag-compliance**: Must check WCAG compliance
+- **keyboard-navigation**: Must verify keyboard navigation
+- **screen-reader**: Must check screen reader compatibility
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "Most users don't need it" | You don't know who your users are. |
+| "Screen readers are outdated" | Screen readers are used by millions daily. |
+| "We'll add ARIA later" | Accessibility is architecture, not decoration. |
+| "Automated tools catch everything" | Automated tools catch ~30% of issues. |
+| "This is an internal tool, it doesn't need to be accessible" | Internal tools have employees with disabilities too — and "internal today" often becomes customer-facing tomorrow without a retrofit budget. |
+| "We'll do the a11y pass at the end" | A `<div onClick>` built without keyboard support requires a rewrite, not a pass, to become a real button — retrofitting costs more than building it right the first time. |
+| "It passed Lighthouse, we're good" | Lighthouse checks contrast ratios and missing alt text; it can't tell you if your custom dropdown traps keyboard focus or if your live region actually announces. |
+| "The design system component is accessible, so our usage is too" | An accessible `<Modal>` component still fails if you forget to pass `aria-label` or trap focus wrong when you compose it — accessibility isn't transitive. |
+| "Color alone is fine, it's obvious from context" | It's obvious to you because you can see the color. A user with color-blindness or a screen-reader user gets zero signal from a red border with no text or icon. |
+| "The contrast is close enough to 4.5:1" | WCAG 2.1 AA is a binary pass/fail at 4.5:1 (3:1 for large text) — "close" fails an audit and fails a low-vision user identically. |
+
+## Red Flags — STOP and Reconsider
+
+If you catch yourself thinking or seeing:
+- A clickable element that isn't a `<button>` or `<a>` and has no `role`/`tabindex`
+- Focus outline removed (`outline: none`) with nothing visible put in its place
+- An image with `alt=""` used for content that actually conveys information
+- A form input with a placeholder standing in for a real `<label>`
+- Color used as the only way to distinguish state (error/success/required)
+- A live region (toast, async update) with no `aria-live` — screen reader users never hear it
+- "We tested it with a mouse and it looked right" as the entire test plan
+
+**All of these mean: stop, verify with keyboard-only navigation and a screen reader before calling it done.**
+
+## Severity Levels
+
+| Level | Description |
+|-------|-------------|
+| Critical | Blocks access for users |
+| Serious | Significant barrier |
+| Moderate | Should be fixed |
+| Minor | Best practice |
+
+## Self-Critique Scoring
+
+Before submitting the audit, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Coverage** | Did I check all four POUR principles? | 1-5 |
+| **Keyboard** | Did I verify the full flow keyboard-only? | 1-5 |
+| **Screen reader** | Are names, roles, and states checked? | 1-5 |
+| **Specificity** | Does each finding cite a WCAG criterion and location? | 1-5 |
+| **Severity** | Is every finding severity-labeled? | 1-5 |
+| **Remediation** | Does each finding state a concrete fix? | 1-5 |
+
+**Minimum passing score:** 30/30
+
+## References
+
+- [wcag-checklist.md](references/wcag-checklist.md) — full WCAG 2.1 AA criterion checklist
+- [aria-patterns.md](references/aria-patterns.md) — landmarks, dialogs, tabs, live regions

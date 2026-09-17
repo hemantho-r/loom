@@ -1,0 +1,48 @@
+name: "@loom/git-worktrees"
+version: "1.0.0"
+description: "Parallel development with git worktrees"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "git-worktrees"
+    description: "Use git worktrees for parallel development"
+    input:
+      - name: "action"
+        type: "enum"
+        description: "Action to perform"
+        values: ["create", "list", "remove", "switch"]
+        required: true
+    output:
+      - name: "worktree"
+        type: "object"
+        description: "Worktree details"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: false
+
+quality:
+  - id: "clean-state"
+    type: "behavioral"
+    description: "Worktrees start from clean state"
+    severity: "error"
+  - id: "branch-naming"
+    type: "behavioral"
+    description: "Branches follow naming convention"
+    severity: "warning"
+  - id: "cleanup"
+    type: "behavioral"
+    description: "Worktrees are cleaned up after use"
+    severity: "warning"
+
+references:
+  - path: "./references/worktree-patterns.md"
+    when: "for-patterns"
+
+tags: ["engineering", "git", "worktrees", "parallel"]
+category: "engineering"
+difficulty: "intermediate"

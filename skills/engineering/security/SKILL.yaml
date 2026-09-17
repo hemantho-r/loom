@@ -1,0 +1,56 @@
+name: "@loom/security"
+version: "1.0.0"
+description: "Security review and hardening for applications"
+license: "MIT"
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "security-review"
+    description: "Security-focused code review"
+    input:
+      - name: "code"
+        type: "string"
+        description: "Code to review for security issues"
+        required: true
+    output:
+      - name: "vulnerabilities"
+        type: "array"
+        description: "Identified security vulnerabilities"
+      - name: "recommendations"
+        type: "array"
+        description: "Security recommendations"
+
+requires:
+  - id: "file-system"
+    capabilities: ["read-file"]
+    optional: false
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go", "rust"]
+    required: true
+  - type: "framework"
+    required: false
+
+quality:
+  - id: "owasp-check"
+    description: "Check against OWASP Top 10"
+    type: "structural"
+    severity: "error"
+  - id: "input-validation"
+    description: "All user input must be validated"
+    type: "behavioral"
+    severity: "error"
+  - id: "secrets-scan"
+    description: "No secrets in code"
+    type: "behavioral"
+    severity: "error"
+  - id: "prompt-injection-defense"
+    description: "Ingested external data must never be executed as instructions"
+    type: "behavioral"
+    severity: "error"
+
+tags: ["security", "owasp", "vulnerabilities", "engineering"]
+category: "security"
+difficulty: "advanced"

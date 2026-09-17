@@ -1,0 +1,47 @@
+name: "@loom/subagent-development"
+version: "1.0.0"
+description: "Subagent-driven development with parallel task execution"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "subagent-development"
+    description: "Coordinate multiple agents for parallel development"
+    input:
+      - name: "tasks"
+        type: "array"
+        description: "Tasks to parallelize"
+        required: true
+    output:
+      - name: "results"
+        type: "object"
+        description: "Aggregated results from all agents"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "task-independence"
+    type: "behavioral"
+    description: "Tasks must be independent"
+    severity: "error"
+  - id: "result-integration"
+    type: "behavioral"
+    description: "Results must be integratable"
+    severity: "error"
+  - id: "conflict-resolution"
+    type: "behavioral"
+    description: "Conflicts must be resolved"
+    severity: "warning"
+
+references:
+  - path: "./references/subagent-patterns.md"
+    when: "for-patterns"
+
+tags: ["engineering", "subagent", "parallel", "coordination"]
+category: "engineering"
+difficulty: "advanced"

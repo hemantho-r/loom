@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Loom Affinity Board (offline companion to @loom/brainstorming)</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+  #lanes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+  .lane { border: 1px solid #ccc; border-radius: 8px; padding: 0.5rem; min-height: 120px; }
+  .lane h2 { font-size: 0.9rem; margin: 0 0 0.5rem; }
+  .card { background: #fff8dc; border: 1px solid #d9c66c; border-radius: 6px; padding: 0.4rem; margin: 0.3rem 0; cursor: pointer; font-size: 0.9rem; }
+  #controls { margin: 1rem 0; }
+  #out { width: 100%; height: 140px; font-family: monospace; }
+</style>
+</head>
+<body>
+<h1>Affinity Board</h1>
+<p>Offline companion to <code>references/visual-maps.md</code>. Click a card to advance it Unsorted → Keep → Drop → Spike. No network, no dependencies.</p>
+<div id="controls">
+  <input id="idea" type="text" placeholder="New idea…" size="50">
+  <button id="add">Add</button>
+  <button id="export">Export markdown</button>
+</div>
+<div id="lanes">
+  <div class="lane" data-lane="Unsorted"><h2>Unsorted (<span class="count">0</span>)</h2></div>
+  <div class="lane" data-lane="Keep"><h2>Keep (<span class="count">0</span>)</h2></div>
+  <div class="lane" data-lane="Drop"><h2>Drop (<span class="count">0</span>)</h2></div>
+  <div class="lane" data-lane="Spike"><h2>Spike (<span class="count">0</span>)</h2></div>
+</div>
+<h2>Brief export</h2>
+<textarea id="out" readonly placeholder="Exported markdown appears here — paste it into your decision brief."></textarea>
+<script>
+(function () {
+  var order = ['Unsorted', 'Keep', 'Drop', 'Spike'];
+  var lanes = {};
+  document.querySelectorAll('.lane').forEach(function (el) {
+    lanes[el.dataset.lane] = el;
+  });
+  function recount() {
+    order.forEach(function (name) {
+      var lane = lanes[name];
+      lane.querySelector('.count').textContent =
+        lane.querySelectorAll('.card').length;
+    });
+  }
+  function addCard(text) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.textContent = text;
+    card.title = 'Click to advance lane';
+    card.addEventListener('click', function () {
+      var current = card.parentElement.dataset.lane;
+      var next = lanes[order[(order.indexOf(current) + 1) % order.length]];
+      next.appendChild(card);
+      recount();
+    });
+    lanes.Unsorted.appendChild(card);
+    recount();
+  }
+  document.getElementById('add').addEventListener('click', function () {
+    var input = document.getElementById('idea');
+    if (input.value.trim()) { addCard(input.value.trim()); input.value = ''; }
+  });
+  document.getElementById('export').addEventListener('click', function () {
+    var lines = ['## Affinity sort'];
+    order.forEach(function (name) {
+      lines.push('### ' + name);
+      lanes[name].querySelectorAll('.card').forEach(function (c) {
+        lines.push('- ' + c.textContent);
+      });
+    });
+    document.getElementById('out').value = lines.join('\n');
+  });
+  recount();
+})();
+</script>
+</body>
+</html>

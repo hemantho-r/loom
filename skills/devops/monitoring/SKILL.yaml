@@ -1,0 +1,50 @@
+name: "@loom/monitoring"
+version: "1.0.0"
+description: "Application monitoring and observability"
+license: "MIT"
+
+authors:
+  - name: "Loom Team"
+
+provides:
+  - id: "monitoring"
+    description: "Set up monitoring and observability"
+    input:
+      - name: "type"
+        type: "enum"
+        description: "Monitoring type"
+        values: ["logging", "metrics", "tracing", "alerting"]
+        required: true
+    output:
+      - name: "result"
+        type: "object"
+        description: "Monitoring setup"
+
+context:
+  - type: "language"
+    values: ["typescript", "javascript", "python", "go"]
+    required: true
+
+quality:
+  - id: "structured-logging"
+    type: "behavioral"
+    description: "Logs are structured"
+    severity: "error"
+  - id: "error-tracking"
+    type: "behavioral"
+    description: "Errors are tracked"
+    severity: "error"
+  - id: "performance-metrics"
+    type: "behavioral"
+    description: "Performance metrics collected"
+    severity: "warning"
+
+references:
+  - path: "./references/logging-patterns.md"
+    when: "for-logging"
+  - path: "./references/metrics-patterns.md"
+    when: "for-metrics"
+
+tags: ["devops", "monitoring", "observability", "logging"]
+category: "devops"
+difficulty: "intermediate"

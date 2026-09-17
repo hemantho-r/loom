@@ -1,0 +1,14 @@
+```mermaid
+flowchart LR
+    subgraph Untrusted
+        Browser([Browser])
+    end
+    subgraph DMZ
+        API[API]
+    end
+    subgraph Trusted
+        DB[(Orders DB)]
+    end
+    Browser -->|HTTPS, credentials| API
+    API -->|SQL, service account| DB
+```

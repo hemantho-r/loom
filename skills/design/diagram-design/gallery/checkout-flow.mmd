@@ -1,0 +1,13 @@
+```mermaid
+flowchart TD
+    Cart([Cart]) --> Pay[Charge payment]
+    Pay --> Ok{Payment succeeded?}
+    Ok -->|Yes| Reserve[Reserve inventory]
+    Ok -->|No| Fail[Return payment error]
+    Reserve --> Stock{Stock available?}
+    Stock -->|Yes| Confirm([Confirm order])
+    Stock -->|No| Refund[Refund payment]
+    Refund --> Fail
+    Fail --> End([End])
+    Confirm --> End
+```

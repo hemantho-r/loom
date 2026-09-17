@@ -1,0 +1,120 @@
+# Implementation
+
+## Overview
+
+Turn an existing spec or plan into working code, faithfully and without inventing scope. This is distinct from [refactoring](../refactoring) (improving code that already works) and [tdd](../tdd) (test-first cycles on a single behavior) — implementation's job is converting a spec you didn't write the requirements for into code that matches it, unit by unit, catching ambiguity before it becomes a wrong guess.
+
+## When to Use
+
+- Implementing a feature from a written spec, ticket, or design doc
+- Building a component whose interface/behavior was already decided elsewhere
+- Any task where "does this match the spec" is the success criterion — not "is this the best possible design"
+
+## Workflow
+
+### Step 1: Decompose the Spec Into Units
+
+Break the spec into the smallest pieces you can implement and verify independently — one function, one endpoint, one component, one validation rule. For each unit, write down (even just as a checklist) what the spec says it must do. A spec that reads as one paragraph of prose almost always hides 3-5 separate implementable units; find them before writing code, not while writing it.
+
+Use this unit checklist per unit — it becomes the verification script in Step 4:
+
+```markdown
+- [ ] Unit: [name]
+  - Spec says: [exact requirement, quoted or paraphrased with section]
+  - Edge cases in spec: [list, or "none stated — see assumptions"]
+  - Test will be: [test name and what it asserts]
+```
+
+### Step 2: Flag Ambiguity — Don't Resolve It By Guessing
+
+Before implementing a unit, check whether the spec actually answers the question you're about to make a decision on (an edge case, a data format, an error-handling choice). If it doesn't:
+
+- If the answer is low-stakes and reversible, pick the most conventional option and note the assumption inline (e.g. a comment or a line in your summary) so it's visible and correctable.
+- If the answer is high-stakes or hard to reverse (data shape, public API surface, security behavior), stop and ask rather than guessing — an invented answer that's wrong costs more to unwind than the question costs to ask.
+
+This is what `follow-spec` actually means in practice: not "I read the spec once," but "every decision I made either came from the spec or was flagged as an assumption."
+
+Keep an assumption log as you go — it is part of the deliverable, surfaced at the Step 5 check-in:
+
+```markdown
+| # | Decision | Assumption made | Stakes | Status |
+|---|----------|-----------------|--------|--------|
+| 1 | Cursor format | Opaque base64 of last id; spec silent | Low (internal only) | Noted inline |
+| 2 | Error shape on expired cursor | Chose 400 + code; spec silent | High (public API) | Asked — awaiting answer, unit blocked |
+```
+
+### Step 3: Implement One Unit at a Time
+
+Implement the smallest unit from Step 1, using the simplest approach that satisfies it — reuse existing code where it fits, but don't build shared abstractions for a second use case that doesn't exist yet (that's what `no-overengineering` is checking for). Resist implementing units out of order just because a later one looks more interesting; unverified early units compound into harder-to-diagnose failures in later ones.
+
+### Step 4: Verify the Unit Against the Spec Before Moving On
+
+Before starting the next unit, check this one against what Step 1 wrote down — not against "does it run," but "does it do what the spec said." Write the test(s) that encode the spec's requirement for this unit (this is `test-coverage`: tests that trace back to a specific spec requirement, not incidental coverage of whatever code happened to get written). A unit that passes its own tests but doesn't match the spec is a bug you're about to ship, not a success.
+
+### Step 5: Check In at Natural Boundaries
+
+After completing a logical group of units (not necessarily every single one), surface what was built, what was assumed (from Step 2), and what's left — before continuing into the next group. This catches spec misreadings early, while they're cheap to fix, instead of after the whole feature is built on top of a wrong assumption.
+
+## Worked Mini-Example
+
+Spec line: "Pages of up to `perPage` users (default 20, max 100) with an
+opaque `cursor`; response includes `nextCursor` (null on the last page)."
+
+- Units: (1) default/max clamping, (2) cursor encode/decode, (3) `nextCursor`
+  null-on-last-page logic.
+- Ambiguity: cursor format unspecified → low-stakes, conventional opaque
+  base64 string, logged as assumption #1.
+- Per-unit tests: "defaults to 20", "clamps 101 → 100", "null nextCursor on
+  short page" — each named after its spec clause.
+- Resisted: offset-mode pagination ("might be useful later" — no spec
+  parent, cut per `no-overengineering`).
+
+## References
+
+- **[coding-standards.md](./references/coding-standards.md)** — naming, function size, error handling, and testing conventions to apply while writing each unit
+
+## Anti-Rationalization
+
+| Excuse | Reality |
+|--------|---------|
+| "The spec doesn't say, so I'll just pick something" | That's a guess wearing a decision's clothes. Flag it (Step 2) instead. |
+| "I'll implement it all then test at the end" | You'll have no idea which unit introduced the mismatch. Verify per-unit (Step 4). |
+| "This abstraction will save time later" | Only if "later" is a real, current requirement — not a guess about the future. |
+| "This edge case wasn't in the spec, but I know what they meant" | You might be wrong, and now the bug is silent — it looks intentional. Flag it, don't infer it. |
+| "While I'm in here, I'll clean this up too" | That's refactoring, a different skill with different gates. Mixing it into implementation makes the diff impossible to review against the spec alone. |
+| "The tests I wrote prove this unit works" | Tests you wrote from the same understanding as the code prove your understanding is internally consistent, not that it matches the spec. Trace each test back to a spec line. |
+| "I'll batch all my assumptions into one check-in at the end" | An assumption discovered wrong on unit 1 should block unit 1, not surface after units 2-8 were built on top of it. |
+| "The spec is clearly wrong here, I'll just fix it" | Maybe it's wrong, maybe you're misreading it. Either way that's a conversation with whoever owns the spec, not a unilateral code change. |
+| "This is basically the same as a pattern I've built before" | "Basically the same" is where the actual requirements differ. Read this spec, don't pattern-match from memory. |
+| "I'm confident enough to skip the assumption log" | Confidence isn't verifiability. The assumption log is what lets someone else — or you, later — check your guesses without re-deriving them. |
+
+## Red Flags — STOP and Flag It
+
+- You're about to write a comment starting with "assuming that..." without also logging it in the assumption table
+- You're implementing a unit whose spec requirement you can't quote or paraphrase
+- You're refactoring surrounding code "while you're at it"
+- You built three units before verifying the first one against the spec
+- You changed the spec's data shape or public surface because your implementation was easier that way
+- Two units disagree about a shared assumption and you haven't reconciled them
+- You're about to skip Step 5 check-in because "it's obviously fine"
+
+## Quality Gates
+
+- **follow-spec**: Implementation follows spec
+- **test-coverage**: Tests cover requirements
+- **no-overengineering**: No overengineering
+
+## Self-Critique Scoring
+
+Before handing off the unit group, score yourself (1-5):
+
+| Axis | Question | Score |
+|------|----------|-------|
+| **Decomposition** | Is each unit verifiable independently? | 1-5 |
+| **Ambiguity** | Is every guess flagged as an assumption? | 1-5 |
+| **Order** | Were units built and verified in dependency order? | 1-5 |
+| **Spec match** | Does each unit do what the spec said, not just run? | 1-5 |
+| **Tests** | Does every test trace to a spec requirement? | 1-5 |
+| **Restraint** | Is there zero code with no spec parent? | 1-5 |
+
+**Minimum passing score:** 30/30
