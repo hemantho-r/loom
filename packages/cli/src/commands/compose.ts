@@ -3,8 +3,30 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+
+function resolveSkillPath(skillsDir: string, name: string): string | null {
+  const shortName = name.replace('@loom/', '');
+
+  const flatPath = join(skillsDir, shortName);
+  if (existsSync(join(flatPath, 'SKILL.yaml'))) {
+    return flatPath;
+  }
+
+  const categories = existsSync(skillsDir)
+    ? readdirSync(skillsDir).filter((f) => existsSync(join(skillsDir, f)))
+    : [];
+
+  for (const category of categories) {
+    const candidate = join(skillsDir, category, shortName);
+    if (existsSync(join(candidate, 'SKILL.yaml'))) {
+      return candidate;
+    }
+  }
+
+  return null;
+}
 
 interface SkillDefinition {
   name: string;
@@ -72,21 +94,16 @@ export const composeCommand = new Command('compose')
     try {
       const skills: SkillDefinition[] = [];
       
-      for (const name of skillNames) {
-        const skillPath = name.startsWith('@loom/')
-          ? join(process.cwd(), 'skills', name.replace('@loom/', ''))
-          : join(process.cwd(), 'skills', name);
+      const skillsDir = join(process.cwd(), 'skills');
 
-        if (!existsSync(skillPath)) {
+      for (const name of skillNames) {
+        const skillPath = resolveSkillPath(skillsDir, name);
+
+        if (!skillPath) {
           throw new Error(`Skill not found: ${name}`);
         }
 
-        const yamlPath = join(skillPath, 'SKILL.yaml');
-        if (!existsSync(yamlPath)) {
-          throw new Error(`No SKILL.yaml in: ${skillPath}`);
-        }
-
-        skills.push(parseSkillYaml(yamlPath));
+        skills.push(parseSkillYaml(join(skillPath, 'SKILL.yaml')));
       }
 
       spinner.stop();

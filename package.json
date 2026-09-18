@@ -15,7 +15,9 @@
     "eval": "node --experimental-strip-types evals/eval-runner.ts",
     "eval:grade": "node scripts/grade-eval.mjs",
     "check": "node scripts/check-consistency.mjs",
-    "generate:adapters": "node scripts/generate-adapters.mjs"
+    "generate:adapters": "node scripts/generate-adapters.mjs",
+    "release:dry-run": "pnpm build && pnpm -r publish --access public --dry-run",
+    "release": "pnpm build && pnpm -r publish --access public"
   },
   "dependencies": {
     "@loom/core": "workspace:*",

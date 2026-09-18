@@ -1,23 +1,45 @@
 # GitHub Copilot Instructions for Loom
 
-## Available Skills
+## Available Skills (26)
 
-Loom provides the following skills for development:
+Loom provides the following skills for development. Each skill's full
+instructions live in `skills/<category>/<name>/SKILL.md`.
 
-### Test-Driven Development (TDD)
-Use when implementing features or bug fixes. Write a failing test first, watch it fail, write minimal code to pass, watch it pass, then refactor.
+### Engineering
+- **tdd** — Red-green-refactor with test seams and vertical slicing
+- **review** — Five-axis review; parallel subagent delegation
+- **debug** — Feedback-loop-first diagnosis
+- **security** — OWASP Top 10, prompt-injection defense
+- **api-design** — REST/GraphQL contract design
+- **adr** — Architecture Decision Records
+- **implementation** — Spec-to-code decomposition
+- **refactoring** — Behavior-preserving transformations
+- **git-worktrees** — Parallel branches via worktrees
+- **subagent-development** — Multi-agent task splitting
+- **lifecycle** — Feature triage and approval gates
+- **migration** — Incremental migration with rollback
+- **performance** — Measure-first profiling
+- **documentation** — Accuracy and completeness for docs
 
-### Code Review
-Multi-axis code review covering correctness, readability, architecture, security, and performance.
+### Design
+- **diagram-design** — Mermaid-based diagrams
+- **design-systems** — Tokens, brand extraction
+- **accessibility** — WCAG 2.1 AA
+- **ui-review** — Responsiveness and consistency audits
 
-### Debugging
-Systematic debugging workflow: reproduce, isolate, understand, fix, verify, prevent.
+### Productivity
+- **grill** — Frontier-batched interview before building
+- **planning** — Task scope and acceptance criteria
+- **handoff** — Context transfer between sessions
+- **brainstorming** — Divergent-then-convergent ideation
+- **issue-tracking** — Falsifiable bug reports
 
-### Security Review
-OWASP Top 10 checklist and security hardening recommendations.
+### DevOps
+- **ci-cd** — Pipeline stages, rollback plan
+- **monitoring** — Structured logging, error tracking
 
-### Performance Optimization
-Measure first, identify bottlenecks, optimize, verify, document.
+### Meta
+- **writing-skills** — How to author a Loom skill
 
 ## How to Use
 
@@ -27,7 +49,8 @@ Measure first, identify bottlenecks, optimize, verify, document.
 
 ## Quality Gates
 
-All Loom skills enforce quality gates:
+All Loom skills enforce quality gates declared in their `SKILL.yaml`, checked
+by `loom validate`:
 - **error**: Must be satisfied
 - **warning**: Should be satisfied
 - **info**: For reference only

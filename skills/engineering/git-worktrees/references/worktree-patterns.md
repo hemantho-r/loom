@@ -5,12 +5,11 @@
 ### Feature Development
 
 ```bash
-# Create worktree for feature
+# Create worktree for feature (this also creates and checks out the branch)
 git worktree add -b feature-auth ../project-feature-auth main
 
 # Work in feature worktree
 cd ../project-feature-auth
-git checkout -b feature-auth
 # ... develop feature ...
 
 # Return to main

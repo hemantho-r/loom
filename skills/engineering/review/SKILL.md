@@ -69,6 +69,7 @@ Does the change introduce performance problems?
 | **Critical:** | Blocks merge | Security vulnerability, data loss |
 | **Nit:** | Minor, optional | Author may ignore |
 | **Optional:** | Suggestion | Worth considering |
+| **FYI:** | Informational | No action needed, context for future reference |
 
 ## Parallel Sub-Agent Review Delegation
 

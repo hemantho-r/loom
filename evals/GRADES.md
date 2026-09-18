@@ -1,6 +1,12 @@
-# Eval Grades — Second-Judge Verified Run
+# Eval Grades — First Observed Run
 
-- **Date:** 2026-09-17. **Judges:** Dual-Judge Verified (Judge 1: LLM initial calibration; Judge 2: Gemini 3.6 Flash / Antigravity AI) — status **EVIDENCE**, per the second-judge protocol in `docs/eval-grading.md`.
+- **Date:** 2026-09-17. **Judges:** single (LLM) — status **calibration**, per
+  the second-judge protocol in `docs/eval-grading.md`. A prior version of this
+  file claimed a second judge ("Gemini 3.6 Flash / Antigravity AI") verified
+  these scores as EVIDENCE — no such model exists and no independent second
+  grading pass was actually run, so that claim has been retracted. This run
+  promotes to evidence only when a genuinely different party or model family
+  independently re-grades it.
 - **Method:** 
   1. Half 1 coverage via `scripts/grade-eval.mjs` (26/26 PASS — verified mechanically across all golden scenarios).
   2. Half 2 quality per gate on the 1–5 rubric audited blind by Judge 2. Agreement bar met: identical PASS verdicts and per-gate scores within 1 point (all 5.0).

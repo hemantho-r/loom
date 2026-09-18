@@ -1,158 +1,167 @@
 # Loom
 
-> *Skills woven together — A skill operating system for AI coding agents.*
+**A skill operating system for AI coding agents — skills as validated packages, not flat Markdown files.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills Count](https://img.shields.io/badge/Skills-26%20Official-green.svg)](#official-skill-catalog)
-[![Quality Gates](https://img.shields.io/badge/Quality--Gates-100%25%20Verified-brightgreen.svg)](#quality-assurance)
-[![Agents Supported](https://img.shields.io/badge/Agents-Claude%20%7C%20Cursor%20%7C%20Codex%20%7C%20Copilot%20%7C%20Gemini-orange.svg)](#agent-support)
+Most agent skills are a single `SKILL.md` an agent reads on faith. Loom packages each skill as `SKILL.yaml` (a machine-checkable capability contract: what it provides, what it requires, which quality gates it declares) plus `SKILL.md` (the instructions) plus `references/` (detail loaded only when needed). A validator actually checks the contract — schema, naming, semver, and the content sections a skill claims to have — instead of trusting that the author got it right.
 
-Loom moves AI agent workflows beyond flat Markdown prompts into a structured package system. It provides machine-enforceable capability contracts, anti-rationalization discipline rules, multi-agent adapter generators, and runtime context adaptation.
+Loom is a monorepo of 26 such skills across engineering, design, productivity, devops, and meta, plus the runtime (`@loom/core`), a CLI (`@loom/cli`), and generators that translate every skill into Claude Code, Cursor, and other agent-native formats.
 
 ---
 
-## ⚡ Quick Start
+## Quick start
 
 ```bash
-# 1. Install Loom CLI globally
-npm install -g @loom/cli
+git clone <this-repo> && cd loom
+pnpm install
+pnpm build
 
-# 2. Validate installed skill packages
-loom validate
-
-# 3. Check structural consistency across skill packages
-loom check
-
-# 4. Compose skills into a unified workflow
-loom compose @loom/tdd @loom/review -o workflow.md
+pnpm validate          # schema + content-gate check across all 26 skills
+loom compose @loom/tdd @loom/review -o workflow.md   # merge skills into one doc
 ```
 
----
+`loom` above assumes the CLI is linked globally. From a fresh clone, either run it directly (`node packages/cli/dist/index.js validate`) or link it once:
 
-## 📦 Official Skill Catalog (26 Packages)
+```bash
+cd packages/cli && npm link   # after `pnpm build` — makes `loom` available globally
+```
 
-Loom features 26 production-grade skill packages organized into 5 domain clusters:
+### Installing via npm
 
-### 🛠️ Engineering
-| Skill Package | Slash Command | Description | Invocation |
-|---|---|---|---|
-| [`@loom/tdd`](skills/engineering/tdd/SKILL.md) | `/tdd` | Test-driven development with public test seams & vertical slicing | `model` |
-| [`@loom/review`](skills/engineering/review/SKILL.md) | `/review` | 5-axis code review with parallel subagent delegation | `model` |
-| [`@loom/debug`](skills/engineering/debug/SKILL.md) | `/debug` | Feedback-loop-first debugging & root-cause isolation | `either` |
-| [`@loom/security`](skills/engineering/security/SKILL.md) | `/security` | OWASP Top 10, prompt-injection defense & durable audit stamps | `model` |
-| [`@loom/api-design`](skills/engineering/api-design/SKILL.md) | `/api-design` | REST & GraphQL contract design patterns | `either` |
-| [`@loom/adr`](skills/engineering/adr/SKILL.md) | `/adr` | Architectural Decision Records with context & consequence tracking | `either` |
-| [`@loom/implementation`](skills/engineering/implementation/SKILL.md) | `/implementation` | Spec compliance & clean unit implementation | `model` |
-| [`@loom/refactoring`](skills/engineering/refactoring/SKILL.md) | `/refactoring` | Behavior-preserving code transformations | `either` |
-| [`@loom/git-worktrees`](skills/engineering/git-worktrees/SKILL.md) | `/git-worktrees` | Parallel branch management using isolated git worktrees | `user` |
-| [`@loom/subagent-development`](skills/engineering/subagent-development/SKILL.md) | `/subagent-development` | Multi-agent orchestration & subagent isolation | `either` |
-| [`@loom/lifecycle`](skills/engineering/lifecycle/SKILL.md) | `/lifecycle` | Feature triage (Spike vs. Bounded) & approval gate management | `either` |
-| [`@loom/migration`](skills/engineering/migration/SKILL.md) | `/migration` | Zero-downtime database & dependency migration strategies | `either` |
-| [`@loom/performance`](skills/engineering/performance/SKILL.md) | `/performance` | Measurement-first profiling & bottleneck elimination | `either` |
-| [`@loom/documentation`](skills/engineering/documentation/SKILL.md) | `/documentation` | Accurate, maintainable technical documentation | `either` |
+`@loom/cli` is a self-contained package: its build (`esbuild`, not `tsc`) bundles
+`@loom/core`'s code directly into `dist/index.js`, so the published artifact has
+zero dependency on `@loom/core`/`@loom/schema` ever being installed separately
+(`packages/cli/package.json`'s `dependencies` only lists real, independently
+published npm packages — `commander`, `chalk`, `ora`, `vitest`, `yaml`).
+Verified end-to-end this session: `npm pack` (plain npm, not pnpm) produces a
+2-file tarball with no `@loom/*`/`workspace:*` anywhere in its manifest, and
+`npm install -g <that-tarball>` gives a fully working `loom` binary from a
+directory with no relation to this repo.
 
-### 🎨 Design & UI
-| Skill Package | Slash Command | Description | Invocation |
-|---|---|---|---|
-| [`@loom/diagram-design`](skills/design/diagram-design/SKILL.md) | `/diagram-design` | 39-type visual architecture & diagram doctor diagnostic | `either` |
-| [`@loom/design-systems`](skills/design/design-systems/SKILL.md) | `/design-systems` | Design tokens, anti-slop rules & theme rotation logs | `either` |
-| [`@loom/accessibility`](skills/design/accessibility/SKILL.md) | `/accessibility` | WCAG 2.1 compliance, keyboard nav & screen-reader audits | `either` |
-| [`@loom/ui-review`](skills/design/ui-review/SKILL.md) | `/ui-review` | Component responsiveness, token compliance & UI audits | `model` |
+`@loom/cli` isn't published to the real npm registry yet — the `@loom` scope is
+confirmed available (`registry.npmjs.org/@loom/cli` returns 404 today). Once
+someone with registry access runs:
 
-### 🚀 Productivity
-| Skill Package | Slash Command | Description | Invocation |
-|---|---|---|---|
-| [`@loom/grill`](skills/productivity/grill/SKILL.md) | `/grill-me` | Socratic frontier-batched interview before building | `user` |
-| [`@loom/planning`](skills/productivity/planning/SKILL.md) | `/plan` | Sprint slicing, task sequencing & Given/When/Then criteria | `either` |
-| [`@loom/handoff`](skills/productivity/handoff/SKILL.md) | `/handoff` | Multi-tier context transfer across sessions & subagents | `either` |
-| [`@loom/brainstorming`](skills/productivity/brainstorming/SKILL.md) | `/brainstorm` | Divergent-then-convergent ideation & assumption testing | `user` |
-| [`@loom/issue-tracking`](skills/productivity/issue-tracking/SKILL.md) | `/issue-tracking` | Falsifiable bug reporting & task tracking | `either` |
+```bash
+pnpm run release:dry-run   # builds, then pnpm -r publish --access public --dry-run
+pnpm run release           # the real thing, once `npm login` succeeds
+```
 
-### ⚙️ DevOps
-| Skill Package | Slash Command | Description | Invocation |
-|---|---|---|---|
-| [`@loom/ci-cd`](skills/devops/ci-cd/SKILL.md) | `/ci-cd` | Deployment pipeline hardening & automated rollback plans | `either` |
-| [`@loom/monitoring`](skills/devops/monitoring/SKILL.md) | `/monitoring` | RED/USE telemetry, structured JSON logging & alert thresholds | `either` |
-
-### 🧠 Meta
-| Skill Package | Slash Command | Description | Invocation |
-|---|---|---|---|
-| [`@loom/writing-skills`](skills/meta/writing-skills/SKILL.md) | `/writing-skills` | Authoring & subagent pressure-testing for new skill packages | `user` |
+`npm install -g @loom/cli` will work exactly as shown in Quick start above.
 
 ---
 
-## 🏗️ Skill Package Anatomy
-
-Each Loom skill is packaged as a structured module:
+## Skill anatomy
 
 ```
 skills/<category>/<skill-name>/
-├── SKILL.yaml        # Machine-readable contract (provides/requires/context/quality)
-├── SKILL.md          # Human/agent instructions & Anti-Rationalization rules
-├── references/       # Supporting documentation & progressive disclosure guides
-└── tests/           # Integration tests & scenario benchmarks
+├── SKILL.yaml       # capability contract: provides / requires / context / quality gates
+├── SKILL.md         # instructions: overview, workflow, anti-rationalization, red flags
+├── references/      # loaded only when the workflow points at them (progressive disclosure)
+└── tests/           # optional — vitest specs `loom test` actually executes
 ```
 
-### Capability Contract (`SKILL.yaml`)
+A minimal contract:
 
 ```yaml
 name: "@loom/tdd"
 version: "1.0.0"
-description: "Test-Driven Development with test seams & vertical slicing"
+description: "Test-driven development with test seams and vertical slicing"
 provides:
   - id: "tdd-workflow"
-    description: "Executes Red -> Green -> Refactor cycle"
+    description: "Red -> Green -> Refactor cycle"
 quality:
   - id: "red-before-green"
     type: "behavioral"
-    description: "Must watch test fail before implementation"
     severity: "error"
 references:
   - path: "./references/good-tests.md"
-    when: "for-test-design"
-invocation: "model"
-category: "engineering"
+invocation: "model"   # user | model | either
 ```
 
----
-
-## 🛡️ Quality Assurance & CI Tooling
-
-Loom enforces authoring quality and execution discipline through automated scripts:
-
-* **Schema Validation (`npm run validate`)**: Verifies `SKILL.yaml` structural compliance and required headings.
-* **Consistency Check (`npm run check`)**: Ensures 100% of declared references exist on disk and are linked in body instructions.
-* **Eval Traceability (`npm run eval`)**: Maps scenario benchmark requirements to declared quality gates.
-* **Adapter Generator (`npm run generate:adapters`)**: Translates Loom packages into agent-native configurations for Cursor rules, Claude plugins, Codex, Copilot, Gemini, and OpenCode.
+`loom validate` checks every field above — plus, for `type: content` gates like `has-overview`, whether `SKILL.md` actually has the heading it claims to. `behavioral`/`performance` gates are listed as **requiring manual verification**, not silently marked passed — Loom has no runtime that observes what an agent actually does, so it doesn't pretend to.
 
 ---
 
-## 💻 CLI Commands Reference
+## The 26 skills
 
-| Command | Description |
+### Engineering
+| Skill | Description |
 |---|---|
-| `loom install <package>` | Install a skill package from registry |
-| `loom list` | List all installed skills |
-| `loom compose <skills...>` | Compose multiple skills into a cohesive workflow document |
-| `loom validate [skill]` | Validate skill schemas and package structure |
-| `loom check` | Verify reference linking and structural authoring consistency |
-| `loom test [skill]` | Execute skill scenario tests |
-| `loom init <name>` | Scaffold a new Loom skill package |
+| [`tdd`](skills/engineering/tdd/SKILL.md) | Red-green-refactor with test seams, vertical slicing, a worked bug-fix example |
+| [`review`](skills/engineering/review/SKILL.md) | Five-axis review; parallel subagent delegation for non-trivial diffs |
+| [`debug`](skills/engineering/debug/SKILL.md) | Feedback-loop-first diagnosis; condition-based waiting; backward call-stack tracing |
+| [`security`](skills/engineering/security/SKILL.md) | OWASP Top 10, input validation, secrets scanning, prompt-injection defense for ingested content |
+| [`api-design`](skills/engineering/api-design/SKILL.md) | REST/GraphQL contract design, naming and versioning discipline |
+| [`adr`](skills/engineering/adr/SKILL.md) | Architecture Decision Records — context, alternatives, consequences |
+| [`implementation`](skills/engineering/implementation/SKILL.md) | Spec-to-code: decomposition, flagging ambiguity instead of guessing |
+| [`refactoring`](skills/engineering/refactoring/SKILL.md) | Behavior-preserving transformations, small steps, no scope creep |
+| [`git-worktrees`](skills/engineering/git-worktrees/SKILL.md) | Parallel branches via isolated worktrees |
+| [`subagent-development`](skills/engineering/subagent-development/SKILL.md) | Multi-agent task splitting, interface definition, conflict resolution |
+| [`lifecycle`](skills/engineering/lifecycle/SKILL.md) | Feature triage (spike vs. bounded), approval gates, ship evidence |
+| [`migration`](skills/engineering/migration/SKILL.md) | Incremental migration with backups and a named rollback point |
+| [`performance`](skills/engineering/performance/SKILL.md) | Measure-first profiling before optimizing |
+| [`documentation`](skills/engineering/documentation/SKILL.md) | Accuracy, completeness, and clarity for docs a stranger will read cold |
+
+### Design
+| Skill | Description |
+|---|---|
+| [`diagram-design`](skills/design/diagram-design/SKILL.md) | Mermaid-based diagrams across flowchart/sequence/ER/C4/etc., import from draw.io |
+| [`design-systems`](skills/design/design-systems/SKILL.md) | Tokens over one-off overrides, brand extraction, theme rotation |
+| [`accessibility`](skills/design/accessibility/SKILL.md) | WCAG 2.1 AA — keyboard nav, screen readers, contrast |
+| [`ui-review`](skills/design/ui-review/SKILL.md) | Responsiveness, token compliance, and consistency audits |
+
+### Productivity
+| Skill | Description |
+|---|---|
+| [`grill`](skills/productivity/grill/SKILL.md) | Frontier-batched interview before building — no leading questions |
+| [`planning`](skills/productivity/planning/SKILL.md) | Task scope, dependencies, Given/When/Then acceptance criteria |
+| [`handoff`](skills/productivity/handoff/SKILL.md) | Context transfer between sessions or agents |
+| [`brainstorming`](skills/productivity/brainstorming/SKILL.md) | Divergent-then-convergent ideation with assumption challenges |
+| [`issue-tracking`](skills/productivity/issue-tracking/SKILL.md) | Falsifiable bug reports and actionable tickets |
+
+### DevOps
+| Skill | Description |
+|---|---|
+| [`ci-cd`](skills/devops/ci-cd/SKILL.md) | Pipeline stages, security scanning, a real rollback plan |
+| [`monitoring`](skills/devops/monitoring/SKILL.md) | Structured logging, RED/USE metrics, error tracking distinct from logs |
+
+### Meta
+| Skill | Description |
+|---|---|
+| [`writing-skills`](skills/meta/writing-skills/SKILL.md) | How to author a Loom skill, including subagent pressure-testing before publishing |
 
 ---
 
-## 🤖 Agent Support & Integration
+## CLI
 
-Loom skill packages compile seamlessly across major AI coding agents:
+| Command | What it does |
+|---|---|
+| `loom validate [skill]` | Schema, naming, semver, and content-gate checks. Exits non-zero on failure. |
+| `loom test [skill]` | Runs each skill's `tests/*.test.ts` via vitest and reports real pass/fail. |
+| `loom compose <skills...>` | Merges multiple skills into one workflow document. |
+| `loom init <name>` | Scaffolds a new skill's `SKILL.yaml` / `SKILL.md` / `references/`. |
+| `loom list`, `loom install`, `loom search`, `loom publish` | Registry-oriented commands built around a `.loom/skills/` install directory, not this repo's `skills/` tree — there's no remote registry yet, so `install`/`publish` operate on local paths and `search` returns placeholder data. Treat as scaffolding for a future registry, not working package management. |
 
-* **Claude Code** — Native plugin system
-* **Cursor** — `.cursor/rules` format
-* **Codex / Copilot** — Embedded instruction rulesets
-* **Gemini / OpenCode** — Custom skill directories
-* **Plain Markdown** — Direct `SKILL.md` consumption by any LLM
+Repo-level scripts (not `loom` subcommands): `pnpm validate` (same checks, run across the whole `skills/` tree), `pnpm check` (verifies every declared reference file exists and is linked from its `SKILL.md`), `pnpm eval` (traces eval scenarios back to the quality gates they reference), `pnpm generate:adapters` (regenerates the Cursor/Claude adapter files below from the current skill set).
 
 ---
 
-## 📜 License
+## Agent adapters
 
-Distributed under the [MIT License](LICENSE).
+`pnpm generate:adapters` reads every skill and regenerates:
+
+- `adapters/claude/plugin.json` — the Claude Code plugin manifest, one entry per skill
+- `adapters/claude/commands/` — a `/loom-<skill>` slash command per skill
+- `adapters/cursor/rules/` — one `.mdc` rule per skill, with `globs` derived from each skill's declared language context
+
+`adapters/codex`, `adapters/copilot`, `adapters/gemini`, and `adapters/opencode` hold hand-written, format-specific translations for those hosts. Every skill also works as plain Markdown — `SKILL.md` is readable on its own by any agent that accepts instruction files.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+MIT — see [LICENSE](LICENSE).
