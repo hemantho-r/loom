@@ -133,12 +133,5 @@
       "path": "../../skills/meta/writing-skills",
       "description": "Create new Loom skills"
     }
-  ],
-  "commands": [
-    {
-      "name": "loom",
-      "description": "Loom skill system commands",
-      "path": "../../packages/cli/dist/index.js"
-    }
   ]
 }

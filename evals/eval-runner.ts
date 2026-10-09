@@ -173,7 +173,7 @@ export async function runEvals(skillName?: string): Promise<void> {
   }
 }
 
-// CLI entry point
+// Direct-execution entry point (run via `pnpm eval`, not imported)
 if (process.argv[1] === import.meta.url.replace('file://', '')) {
   const skillName = process.argv[2];
   runEvals(skillName);

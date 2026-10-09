@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 
-// Loom CLI - postinstall
+// Loom - postinstall
 // Runs automatically after `npm install -g @loom-skills/loom`. Copies the
 // bundled skills (shipped under dist/skills/ at publish time — see the
 // `build` script in package.json) into the global ~/.loom/skills/ directory,
-// so a plain npm install is enough to get the full skill library with no
-// separate `loom install` step required.
+// so a plain npm install is enough to get the full skill library.
 //
 // Must never throw: a failing postinstall script aborts the entire
 // `npm install`, which would be a much worse outcome than silently skipping
-// the auto-setup and letting the user run `loom install` manually later.
+// the auto-setup.
 
 import { existsSync, mkdirSync, cpSync, writeFileSync, readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
