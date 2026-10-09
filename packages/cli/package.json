@@ -1,6 +1,6 @@
 {
   "name": "@loom-skills/loom",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Installs the Loom skill library into ~/.loom/skills on npm install",
   "homepage": "https://github.com/hemantho-r/loom",
   "repository": {
