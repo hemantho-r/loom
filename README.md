@@ -4,7 +4,7 @@
 
 Most agent skills are a single `SKILL.md` an agent reads on faith. Loom packages each skill as `SKILL.yaml` (a machine-checkable capability contract: what it provides, what it requires, which quality gates it declares) plus `SKILL.md` (the instructions) plus `references/` (detail loaded only when needed). A validator actually checks the contract — schema, naming, semver, and the content sections a skill claims to have — instead of trusting that the author got it right.
 
-Loom is a monorepo of 26 such skills across engineering, design, productivity, devops, and meta, plus the runtime (`@loom-skills/core`), a CLI (`@loom-skills/cli`), and generators that translate every skill into Claude Code, Cursor, and other agent-native formats.
+Loom is a monorepo of 26 such skills across engineering, design, productivity, devops, and meta, plus an internal runtime (`@loom-skills/core`, not published — bundled directly into the CLI), a CLI (`@loom-skills/loom`, binary name `loom`), and generators that translate every skill into Claude Code, Cursor, and other agent-native formats.
 
 ---
 
@@ -27,7 +27,7 @@ cd packages/cli && npm link   # after `pnpm build` — makes `loom` available gl
 
 ### Installing via npm
 
-`@loom-skills/cli` is a self-contained package: its build (`esbuild`, not `tsc`) bundles
+`@loom-skills/loom` is a self-contained package: its build (`esbuild`, not `tsc`) bundles
 `@loom-skills/core`'s code directly into `dist/index.js`, so the published artifact has
 zero dependency on `@loom-skills/core`/`@loom-skills/schema` ever being installed separately
 (`packages/cli/package.json`'s `dependencies` only lists real, independently
@@ -37,16 +37,27 @@ Verified end-to-end this session: `npm pack` (plain npm, not pnpm) produces a
 `npm install -g <that-tarball>` gives a fully working `loom` binary from a
 directory with no relation to this repo.
 
-`@loom-skills/cli` isn't published to the real npm registry yet (all three
-`@loom-skills/*` names return 404 today, and the `loom-skills` org is owned
-for publishing). Once `npm login` succeeds for an org member, run:
+`@loom-skills/core` and `@loom-skills/schema` are intentionally **not**
+published — nothing external consumes either (no documented integration
+beyond this repo's own internal build tooling), so they're marked
+`"private": true` and stay workspace-only. Only the self-contained CLI is
+shipped to the registry, under the name `@loom-skills/loom` (previously
+`@loom-skills/cli` — renamed once the generic `cli` subpackage name no
+longer had anything to disambiguate against). Once `npm login` succeeds for
+an org member, run:
 
 ```bash
 pnpm run release:dry-run   # builds, then pnpm -r publish --access public --dry-run
-pnpm run release           # the real thing, once `npm login` succeeds
+pnpm run release           # the real thing — only publishes @loom-skills/loom, core/schema are private
 ```
 
-`npm install -g @loom-skills/cli` will work exactly as shown in Quick start above.
+`npm install -g @loom-skills/loom` will work exactly as shown in Quick start above.
+
+The published package also bundles all 26 skills (copied into `dist/skills/`
+at build time) and installs them automatically via a `postinstall` script —
+`npm install -g @loom-skills/loom` alone drops the full skill library into
+`~/.loom/skills/`, with no separate `loom install` step and no other CLI
+command required to get the base library in place.
 
 ---
 
@@ -72,7 +83,7 @@ can consume the same 26 skills.
 | OpenCode | Point it at `adapters/opencode/AGENTS.md` |
 | Gemini | Point it at `adapters/gemini/GEMINI.md` |
 | Any agent | Read `skills/<category>/<name>/SKILL.md` directly — plain Markdown, no tooling |
-| CLI users | `npm install -g @loom-skills/cli`, then `loom install <path-or-url>` into `.loom/skills/` |
+| CLI users | `npm install -g @loom-skills/loom` — installs all 26 skills automatically into `~/.loom/skills/` |
 
 All adapter files are generated, not hand-written: `pnpm generate:adapters`
 rebuilds them from the current skill set (26 slash commands, 26 Cursor

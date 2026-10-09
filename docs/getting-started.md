@@ -4,10 +4,10 @@
 
 ```bash
 # Install globally
-npm install -g @loom-skills/cli
+npm install -g @loom-skills/loom
 
 # Or use npx
-npx @loom-skills/cli --help
+npx @loom-skills/loom --help
 ```
 
 ## Quick Start

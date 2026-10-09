@@ -14,8 +14,8 @@
   },
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @loom-skills/core build && pnpm --filter @loom-skills/schema build && pnpm --filter @loom-skills/cli build",
-    "dev": "pnpm --filter @loom-skills/core dev & pnpm --filter @loom-skills/cli dev",
+    "build": "pnpm --filter @loom-skills/core build && pnpm --filter @loom-skills/schema build && pnpm --filter @loom-skills/loom build",
+    "dev": "pnpm --filter @loom-skills/core dev & pnpm --filter @loom-skills/loom dev",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "clean": "pnpm -r clean",

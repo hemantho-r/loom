@@ -20,12 +20,10 @@
     "./context.schema.json": "./context.schema.json",
     "./quality-gate.schema.json": "./quality-gate.schema.json"
   },
+  "private": true,
   "files": [
     "*.schema.json"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "build": "echo 'No build needed - schema package ships raw JSON'",
     "lint": "echo 'No TypeScript to lint'"

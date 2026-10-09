@@ -1,5 +1,5 @@
 {
-  "name": "@loom-skills/cli",
+  "name": "@loom-skills/loom",
   "version": "0.1.0",
   "description": "Command-line interface for Loom skill system",
   "homepage": "https://github.com/hemantho-r/loom",
@@ -17,17 +17,19 @@
     "loom": "dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "scripts"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --format=esm --target=node18 --outfile=dist/index.js --external:commander --external:chalk --external:ora --external:vitest --external:yaml && chmod +x dist/index.js",
+    "build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --format=esm --target=node18 --outfile=dist/index.js --external:commander --external:chalk --external:ora --external:vitest --external:yaml && chmod +x dist/index.js && mkdir -p dist/skills && cp -R ../../skills/. dist/skills/",
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "postinstall": "node scripts/postinstall.mjs"
   },
   "dependencies": {
     "commander": "^12.0.0",

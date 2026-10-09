@@ -10,7 +10,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
 /**
- * Resolve the vitest CLI entry point from @loom-skills/cli's own dependency,
+ * Resolve the vitest CLI entry point from @loom-skills/loom's own dependency,
  * regardless of where `loom test` is invoked from.
  */
 function resolveVitestBin(): string {
