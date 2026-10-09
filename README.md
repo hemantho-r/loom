@@ -15,11 +15,11 @@ npm install -g @loom-skills/loom
 ```
 
 That's the entire interface — no commands, no flags. A `postinstall` script
-copies the 26 bundled skills straight into `~/.loom/skills/`. Verified
-end-to-end: `npm pack` produces a tarball containing only the skills and the
-postinstall script — no dependencies, no binary — and a genuinely fresh
-`npm install -g @loom-skills/loom` from the public registry populates
-`~/.loom/skills/` with all 26 skills with nothing else to run.
+copies the 26 bundled skills straight into `~/.loom/skills/` and writes a
+`.loom-manifest.json` next to each one (name, version, install time), so you
+can see what came from the package versus what you added by hand. The
+published package has no dependencies and no binary — it's just the skill
+files plus one small install script.
 
 `@loom-skills/core` and `@loom-skills/schema` are intentionally **not**
 published — nothing external consumes either, so they stay workspace-only,
