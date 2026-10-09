@@ -38,14 +38,14 @@ State back what you heard in one sentence and ask for correction:
 "So the topic is ___. Right, or what am I missing?" Do not proceed on an
 uncorrected frame.
 
-### Step 2: Ask One Question at a Time
+### Step 2: Frontier-Based Interviewing (Design-Tree Model)
 
 Rules (see `references/grill-techniques.md`):
 
-- One question per message. Never stack two questions.
-- Open, never leading: "What breaks if this ships late?" not "This isn't urgent, right?"
-- Follow the energy: probe the answer just given before moving to the next area.
-- Cover, in any order: problem, who is affected, constraints, what "done" looks like, what is explicitly out of scope.
+- **Frontier Batching:** Maintain a mental design-tree of the problem. Identify the "frontier of unknowns" (unblocked branches of constraints, target users, and trade-offs). Batch all unblocked questions for the current frontier into a single clear interview round rather than slow single-question trickles. Recompute the frontier from the user's answers and repeat until the frontier shrinks to zero.
+- **Open & Unbiased:** Keep questions open and non-leading: "What breaks if this ships late?" not "This isn't urgent, right?"
+- **Follow the Frontier:** Probe the answer given to resolve branch dependencies before moving to unrelated leaves.
+- **Coverage Areas:** Cover problem statement, affected users, technical constraints, explicit non-goals, and success metrics.
 
 ### Step 3: Challenge One Assumption
 

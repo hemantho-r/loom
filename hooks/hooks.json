@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node hooks/loom-session-start.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

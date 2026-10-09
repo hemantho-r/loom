@@ -7,7 +7,7 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, rmSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { getLoader } from '@loom/core';
+import { getLoader } from '@loom-skills/core';
 
 const rootDir = process.cwd();
 const skillsDir = join(rootDir, 'skills');
@@ -49,6 +49,27 @@ writeFileSync(pluginPath, `${JSON.stringify(existingPlugin, null, 2)}\n`);
 console.log(`✓ adapters/claude/plugin.json: ${skills.length} skill(s)`);
 
 // ---------------------------------------------------------------------------
+// adapters/codex/plugin.json (same custom manifest shape, was stale at 5)
+// ---------------------------------------------------------------------------
+
+const codexAdapterDir = join(rootDir, 'adapters', 'codex');
+const codexPluginPath = join(codexAdapterDir, 'plugin.json');
+const existingCodexPlugin = JSON.parse(readFileSync(codexPluginPath, 'utf-8'));
+
+existingCodexPlugin.skills = skills.map((skill) => {
+  const shortName = skill.definition.name.replace(/^@[^/]+\//, '');
+  const relPath = relative(codexAdapterDir, skill.path);
+  return {
+    name: shortName,
+    path: relPath.startsWith('.') ? relPath : `./${relPath}`,
+    description: skill.definition.description,
+  };
+});
+
+writeFileSync(codexPluginPath, `${JSON.stringify(existingCodexPlugin, null, 2)}\n`);
+console.log(`✓ adapters/codex/plugin.json: ${skills.length} skill(s)`);
+
+// ---------------------------------------------------------------------------
 // adapters/cursor/rules/*.mdc
 // ---------------------------------------------------------------------------
 
@@ -83,11 +104,16 @@ for (const skill of skills) {
 console.log(`✓ adapters/cursor/rules/: ${skills.length} rule(s)`);
 
 // ---------------------------------------------------------------------------
-// adapters/claude/commands/<skill>.md (per-skill slash commands)
+// commands/loom-<skill>.md (Claude-native per-skill slash commands at the
+// plugin root, next to skills/ and agents/)
 // ---------------------------------------------------------------------------
 
-const claudeCommandsDir = join(claudeAdapterDir, 'commands');
+const claudeCommandsDir = join(rootDir, 'commands');
 mkdirSync(claudeCommandsDir, { recursive: true });
+// Remove the previous non-native location if it still exists.
+if (claudeCommandsDir !== join(claudeAdapterDir, 'commands')) {
+  rmSync(join(claudeAdapterDir, 'commands'), { recursive: true, force: true });
+}
 
 for (const skill of skills) {
   const shortName = skill.definition.name.replace(/^@[^/]+\//, '');
@@ -116,7 +142,7 @@ for (const skill of skills) {
   writeFileSync(join(claudeCommandsDir, `loom-${shortName}.md`), commandContent);
 }
 
-console.log(`✓ adapters/claude/commands/: per-skill slash commands`);
+console.log(`✓ commands/: ${skills.length} Claude-native slash command(s)`);
 
 const usedDirs = readdirSync(skillsDir);
 console.log(`\nGenerated adapters for ${skills.length} skill(s) across ${usedDirs.length} categor${usedDirs.length === 1 ? 'y' : 'ies'}.`);

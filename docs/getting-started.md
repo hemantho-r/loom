@@ -4,10 +4,10 @@
 
 ```bash
 # Install globally
-npm install -g @loom/cli
+npm install -g @loom-skills/cli
 
 # Or use npx
-npx @loom/cli --help
+npx @loom-skills/cli --help
 ```
 
 ## Quick Start
@@ -15,7 +15,7 @@ npx @loom/cli --help
 ### 1. Install a Skill
 
 ```bash
-loom install @loom/tdd
+loom install @loom-skills/tdd
 ```
 
 ### 2. Use the Skill
@@ -25,7 +25,7 @@ Once installed, the skill is available in your project. The skill adapts to your
 ### 3. Compose Skills
 
 ```bash
-loom compose @loom/tdd @loom/review
+loom compose @loom-skills/tdd @loom-skills/review
 ```
 
 This creates a combined workflow that applies both skills.
@@ -47,7 +47,7 @@ This creates:
 ### 2. Edit SKILL.yaml
 
 ```yaml
-name: "@loom/my-skill"
+name: "@loom-skills/my-skill"
 version: "1.0.0"
 description: "What my skill does"
 license: "MIT"

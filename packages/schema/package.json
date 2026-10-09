@@ -1,7 +1,16 @@
 {
-  "name": "@loom/schema",
+  "name": "@loom-skills/schema",
   "version": "0.1.0",
   "description": "JSON schemas for Loom skill definitions",
+  "homepage": "https://github.com/hemantho-r/loom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hemantho-r/loom.git",
+    "directory": "packages/schema"
+  },
+  "bugs": {
+    "url": "https://github.com/hemantho-r/loom/issues"
+  },
   "type": "module",
   "main": "skill.schema.json",
   "exports": {

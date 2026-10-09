@@ -1,4 +1,4 @@
-name: "@loom/test"
+name: "@loom-skills/test"
 version: "1.0.0"
 description: "A test skill"
 provides:

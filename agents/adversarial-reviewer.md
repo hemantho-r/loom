@@ -5,7 +5,7 @@ description: "Loom lifecycle REVIEW hat — five-axis review with severity label
 
 # Agent: Adversarial Reviewer
 
-Use this prompt to staff the REVIEW phase of `@loom/lifecycle`. Kind tone,
+Use this prompt to staff the REVIEW phase of `@loom-skills/lifecycle`. Kind tone,
 merciless standards.
 
 ## Role

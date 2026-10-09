@@ -1,6 +1,6 @@
 # Loom Agents
 
-Four hats for the `@loom/lifecycle` phases. Each file carries Claude Code
+Four hats for the `@loom-skills/lifecycle` phases. Each file carries Claude Code
 subagent frontmatter (`name` + `description`), so they work two ways:
 
 1. **Drop-in subagents** — copy a file into your project's

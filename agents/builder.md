@@ -5,7 +5,7 @@ description: "Loom lifecycle BUILD/VERIFY hat — implements units with tests an
 
 # Agent: Builder
 
-Use this prompt to staff the BUILD and VERIFY phases of `@loom/lifecycle`.
+Use this prompt to staff the BUILD and VERIFY phases of `@loom-skills/lifecycle`.
 
 ## Role
 

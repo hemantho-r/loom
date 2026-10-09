@@ -1,7 +1,7 @@
 # Writing-skills golden: new-skill-draft
 
 ```yaml
-name: "@loom/query-review"
+name: "@loom-skills/query-review"
 version: "0.1.0"
 description: "Review database queries for N+1, missing indexes, and unsafe patterns"
 invocation: "model"

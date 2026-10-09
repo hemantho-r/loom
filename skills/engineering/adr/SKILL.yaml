@@ -1,4 +1,4 @@
-name: "@loom/adr"
+name: "@loom-skills/adr"
 version: "1.0.0"
 description: "Architecture Decision Records"
 license: "MIT"

@@ -4,19 +4,19 @@
 
 Most agent skills are a single `SKILL.md` an agent reads on faith. Loom packages each skill as `SKILL.yaml` (a machine-checkable capability contract: what it provides, what it requires, which quality gates it declares) plus `SKILL.md` (the instructions) plus `references/` (detail loaded only when needed). A validator actually checks the contract — schema, naming, semver, and the content sections a skill claims to have — instead of trusting that the author got it right.
 
-Loom is a monorepo of 26 such skills across engineering, design, productivity, devops, and meta, plus the runtime (`@loom/core`), a CLI (`@loom/cli`), and generators that translate every skill into Claude Code, Cursor, and other agent-native formats.
+Loom is a monorepo of 26 such skills across engineering, design, productivity, devops, and meta, plus the runtime (`@loom-skills/core`), a CLI (`@loom-skills/cli`), and generators that translate every skill into Claude Code, Cursor, and other agent-native formats.
 
 ---
 
 ## Quick start
 
 ```bash
-git clone <this-repo> && cd loom
+git clone https://github.com/hemantho-r/loom && cd loom
 pnpm install
 pnpm build
 
 pnpm validate          # schema + content-gate check across all 26 skills
-loom compose @loom/tdd @loom/review -o workflow.md   # merge skills into one doc
+loom compose @loom-skills/tdd @loom-skills/review -o workflow.md   # merge skills into one doc
 ```
 
 `loom` above assumes the CLI is linked globally. From a fresh clone, either run it directly (`node packages/cli/dist/index.js validate`) or link it once:
@@ -27,26 +27,58 @@ cd packages/cli && npm link   # after `pnpm build` — makes `loom` available gl
 
 ### Installing via npm
 
-`@loom/cli` is a self-contained package: its build (`esbuild`, not `tsc`) bundles
-`@loom/core`'s code directly into `dist/index.js`, so the published artifact has
-zero dependency on `@loom/core`/`@loom/schema` ever being installed separately
+`@loom-skills/cli` is a self-contained package: its build (`esbuild`, not `tsc`) bundles
+`@loom-skills/core`'s code directly into `dist/index.js`, so the published artifact has
+zero dependency on `@loom-skills/core`/`@loom-skills/schema` ever being installed separately
 (`packages/cli/package.json`'s `dependencies` only lists real, independently
 published npm packages — `commander`, `chalk`, `ora`, `vitest`, `yaml`).
 Verified end-to-end this session: `npm pack` (plain npm, not pnpm) produces a
-2-file tarball with no `@loom/*`/`workspace:*` anywhere in its manifest, and
+2-file tarball with no `@loom-skills/*`/`workspace:*` anywhere in its manifest, and
 `npm install -g <that-tarball>` gives a fully working `loom` binary from a
 directory with no relation to this repo.
 
-`@loom/cli` isn't published to the real npm registry yet — the `@loom` scope is
-confirmed available (`registry.npmjs.org/@loom/cli` returns 404 today). Once
-someone with registry access runs:
+`@loom-skills/cli` isn't published to the real npm registry yet (all three
+`@loom-skills/*` names return 404 today, and the `loom-skills` org is owned
+for publishing). Once `npm login` succeeds for an org member, run:
 
 ```bash
 pnpm run release:dry-run   # builds, then pnpm -r publish --access public --dry-run
 pnpm run release           # the real thing, once `npm login` succeeds
 ```
 
-`npm install -g @loom/cli` will work exactly as shown in Quick start above.
+`npm install -g @loom-skills/cli` will work exactly as shown in Quick start above.
+
+---
+
+## Get Loom (install the offering)
+
+This repo ([github.com/hemantho-r/loom](https://github.com/hemantho-r/loom))
+is laid out as a Claude Code plugin at its root (`skills/`,
+`commands/`, `agents/`, `hooks/` + `.claude-plugin/`), so every agent host
+can consume the same 26 skills.
+
+```bash
+# Claude Code — one-time marketplace setup, then install
+/plugin marketplace add hemantho-r/loom
+/plugin install loom@loom-marketplace
+```
+
+| Host | How to install |
+|---|---|
+| Claude Code | Marketplace above, or copy `commands/loom-<skill>.md` into your project's `commands/` |
+| Cursor | Copy `adapters/cursor/rules/<skill>.mdc` into `.cursor/rules/` (globs included) |
+| Codex | `adapters/codex/plugin.json` indexes all 26 skills with repo-relative paths |
+| Copilot | Point it at `adapters/copilot/copilot-instructions.md` |
+| OpenCode | Point it at `adapters/opencode/AGENTS.md` |
+| Gemini | Point it at `adapters/gemini/GEMINI.md` |
+| Any agent | Read `skills/<category>/<name>/SKILL.md` directly — plain Markdown, no tooling |
+| CLI users | `npm install -g @loom-skills/cli`, then `loom install <path-or-url>` into `.loom/skills/` |
+
+All adapter files are generated, not hand-written: `pnpm generate:adapters`
+rebuilds them from the current skill set (26 slash commands, 26 Cursor
+rules, both plugin manifests). The `SessionStart` hook (`hooks/`) announces
+locally installed `.loom/skills/` at session start; it prints nothing when
+none are installed.
 
 ---
 
@@ -63,7 +95,7 @@ skills/<category>/<skill-name>/
 A minimal contract:
 
 ```yaml
-name: "@loom/tdd"
+name: "@loom-skills/tdd"
 version: "1.0.0"
 description: "Test-driven development with test seams and vertical slicing"
 provides:
@@ -150,8 +182,11 @@ Repo-level scripts (not `loom` subcommands): `pnpm validate` (same checks, run a
 
 `pnpm generate:adapters` reads every skill and regenerates:
 
-- `adapters/claude/plugin.json` — the Claude Code plugin manifest, one entry per skill
-- `adapters/claude/commands/` — a `/loom-<skill>` slash command per skill
+- `commands/loom-<skill>.md` — Claude-native slash commands at the plugin root (26 total)
+- `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` — install via `/plugin marketplace add hemantho-r/loom`
+- `hooks/hooks.json` + `hooks/loom-session-start.mjs` — announces installed `.loom/skills/` at session start
+- `adapters/claude/plugin.json` — custom skill index manifest, one entry per skill
+- `adapters/codex/plugin.json` — same index shape for Codex, one entry per skill
 - `adapters/cursor/rules/` — one `.mdc` rule per skill, with `globs` derived from each skill's declared language context
 
 `adapters/codex`, `adapters/copilot`, `adapters/gemini`, and `adapters/opencode` hold hand-written, format-specific translations for those hosts. Every skill also works as plain Markdown — `SKILL.md` is readable on its own by any agent that accepts instruction files.

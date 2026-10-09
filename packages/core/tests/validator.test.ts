@@ -6,7 +6,7 @@ describe('Validator', () => {
   const validator = new Validator();
 
   const validSkill: SkillDefinition = {
-    name: '@loom/test',
+    name: '@loom-skills/test',
     version: '1.0.0',
     description: 'A test skill for validation',
     provides: [

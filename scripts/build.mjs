@@ -22,16 +22,16 @@ for (const pkg of packages) {
     continue;
   }
 
-  console.log(`Building @loom/${pkg}...`);
+  console.log(`Building @loom-skills/${pkg}...`);
 
   try {
     execSync('pnpm run build', {
       cwd: pkgDir,
       stdio: 'inherit',
     });
-    console.log(`✓ @loom/${pkg} built\n`);
+    console.log(`✓ @loom-skills/${pkg} built\n`);
   } catch (error) {
-    console.error(`✗ @loom/${pkg} failed\n`);
+    console.error(`✗ @loom-skills/${pkg} failed\n`);
     process.exit(1);
   }
 }

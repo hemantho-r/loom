@@ -1,4 +1,4 @@
-name: "@loom/grill"
+name: "@loom-skills/grill"
 version: "1.0.0"
 description: "Socratic grilling interview that forces clarity before building"
 license: "MIT"

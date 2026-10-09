@@ -1,0 +1,11 @@
+{
+  "name": "loom",
+  "version": "0.1.0",
+  "description": "Skills woven together — 26 composable engineering, design, productivity, and devops skills with validated contracts",
+  "author": {
+    "name": "Loom Team"
+  },
+  "homepage": "https://github.com/hemantho-r/loom",
+  "repository": "https://github.com/hemantho-r/loom",
+  "keywords": ["skills", "tdd", "code-review", "debugging", "design-systems", "accessibility"]
+}

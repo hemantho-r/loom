@@ -1,4 +1,4 @@
-name: "@loom/ci-cd"
+name: "@loom-skills/ci-cd"
 version: "1.0.0"
 description: "CI/CD pipeline setup and maintenance"
 license: "MIT"

@@ -4,10 +4,18 @@
   "private": true,
   "description": "Skills woven together — A skill operating system for AI coding agents",
   "license": "MIT",
+  "homepage": "https://github.com/hemantho-r/loom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hemantho-r/loom.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hemantho-r/loom/issues"
+  },
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @loom/core build && pnpm --filter @loom/schema build && pnpm --filter @loom/cli build",
-    "dev": "pnpm --filter @loom/core dev & pnpm --filter @loom/cli dev",
+    "build": "pnpm --filter @loom-skills/core build && pnpm --filter @loom-skills/schema build && pnpm --filter @loom-skills/cli build",
+    "dev": "pnpm --filter @loom-skills/core dev & pnpm --filter @loom-skills/cli dev",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "clean": "pnpm -r clean",
@@ -20,7 +28,7 @@
     "release": "pnpm build && pnpm -r publish --access public"
   },
   "dependencies": {
-    "@loom/core": "workspace:*",
+    "@loom-skills/core": "workspace:*",
     "chalk": "^5.3.0"
   },
   "engines": {

@@ -27,7 +27,7 @@ export const installCommand = new Command('install')
       if (packagePath.startsWith('./') || packagePath.startsWith('/')) {
         sourcePath = resolve(packagePath);
       } else {
-        sourcePath = join(process.cwd(), 'skills', packagePath.replace('@loom/', ''));
+        sourcePath = join(process.cwd(), 'skills', packagePath.replace(/^@[^/]+\//, ''));
       }
 
       if (!existsSync(sourcePath)) {
@@ -46,7 +46,7 @@ export const installCommand = new Command('install')
       const skillName = nameMatch?.[1] || packagePath.split('/').pop() || 'unknown';
       const skillVersion = versionMatch?.[1] || '0.0.0';
 
-      const skillDir = join(targetDir, skillName.replace('@loom/', ''));
+      const skillDir = join(targetDir, skillName.replace(/^@[^/]+\//, ''));
       if (existsSync(skillDir) && !options.force) {
         spinner.warn(`Skill already installed: ${skillName}`);
         return;

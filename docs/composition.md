@@ -7,7 +7,7 @@ Loom allows you to compose multiple skills into a combined workflow. This is use
 ## Basic Composition
 
 ```bash
-loom compose @loom/tdd @loom/review
+loom compose @loom-skills/tdd @loom-skills/review
 ```
 
 This creates a workflow that combines TDD and code review capabilities.
@@ -100,7 +100,7 @@ The composed workflow includes:
 ## Example
 
 ```bash
-loom compose @loom/tdd @loom/review @loom/debug
+loom compose @loom-skills/tdd @loom-skills/review @loom-skills/debug
 ```
 
 Output:
@@ -112,9 +112,9 @@ Generated: 2026-09-15
 
 ## Skills
 
-- **@loom/tdd**@1.0.0: Test-driven development
-- **@loom/review**@1.0.0: Code review
-- **@loom/debug**@1.0.0: Debugging workflow
+- **@loom-skills/tdd**@1.0.0: Test-driven development
+- **@loom-skills/review**@1.0.0: Code review
+- **@loom-skills/debug**@1.0.0: Debugging workflow
 
 ## Capabilities
 

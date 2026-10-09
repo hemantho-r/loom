@@ -1,7 +1,16 @@
 {
-  "name": "@loom/core",
+  "name": "@loom-skills/core",
   "version": "0.1.0",
   "description": "Core runtime for Loom skill system",
+  "homepage": "https://github.com/hemantho-r/loom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hemantho-r/loom.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/hemantho-r/loom/issues"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

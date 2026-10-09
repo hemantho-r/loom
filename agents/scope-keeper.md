@@ -5,7 +5,7 @@ description: "Loom lifecycle DEFINE/PLAN hat — locks scope, success criteria, 
 
 # Agent: Scope Keeper
 
-Use this prompt to staff the DEFINE and PLAN phases of `@loom/lifecycle`
+Use this prompt to staff the DEFINE and PLAN phases of `@loom-skills/lifecycle`
 (either as a subagent system prompt or a role you adopt explicitly).
 
 ## Role

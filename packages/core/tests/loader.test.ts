@@ -25,7 +25,7 @@ describe('SkillLoader', () => {
 
       writeFileSync(
         join(skillDir, 'SKILL.yaml'),
-        `name: "@loom/test"
+        `name: "@loom-skills/test"
 version: "1.0.0"
 description: "A test skill"
 provides:
@@ -38,7 +38,7 @@ provides:
 
       const skill = await loader.load(skillDir);
 
-      expect(skill.definition.name).toBe('@loom/test');
+      expect(skill.definition.name).toBe('@loom-skills/test');
       expect(skill.definition.version).toBe('1.0.0');
       expect(skill.content).toBe('# Test Skill');
     });
@@ -62,7 +62,7 @@ provides:
       mkdirSync(join(skillsDir, 'engineering', 'skill1'), { recursive: true });
       mkdirSync(join(skillsDir, 'engineering', 'skill2'), { recursive: true });
 
-      const yamlContent = `name: "@loom/test"
+      const yamlContent = `name: "@loom-skills/test"
 version: "1.0.0"
 description: "A test skill"
 provides:

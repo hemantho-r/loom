@@ -110,7 +110,7 @@ Info gates are informational and don't block or warn.
 
 ## What's Actually Automated vs. Manual
 
-Loom's validator (`@loom/core`'s `Validator.validateLoaded()`, used by both
+Loom's validator (`@loom-skills/core`'s `Validator.validateLoaded()`, used by both
 `loom validate` and `pnpm validate`) can only check things that are visible
 in the skill package itself — the YAML definition and the SKILL.md text. It
 cannot observe what an agent actually does while following a skill's

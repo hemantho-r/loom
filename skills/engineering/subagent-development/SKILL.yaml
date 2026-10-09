@@ -1,4 +1,4 @@
-name: "@loom/subagent-development"
+name: "@loom-skills/subagent-development"
 version: "1.0.0"
 description: "Subagent-driven development with parallel task execution"
 license: "MIT"

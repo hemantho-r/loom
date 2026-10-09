@@ -1,4 +1,4 @@
-name: "@loom/migration"
+name: "@loom-skills/migration"
 version: "1.0.0"
 description: "Code and data migration workflows"
 license: "MIT"

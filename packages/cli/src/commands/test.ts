@@ -10,7 +10,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
 /**
- * Resolve the vitest CLI entry point from @loom/cli's own dependency,
+ * Resolve the vitest CLI entry point from @loom-skills/cli's own dependency,
  * regardless of where `loom test` is invoked from.
  */
 function resolveVitestBin(): string {
@@ -53,9 +53,19 @@ export const testCommand = new Command('test')
       const skillDirs: string[] = [];
 
       if (skillName) {
-        const skillPath = skillName.startsWith('@loom/')
-          ? join(skillsDir, skillName.replace('@loom/', ''))
+        let skillPath = /^@[^/]+\//.test(skillName)
+          ? join(skillsDir, skillName.replace(/^@[^/]+\//, ''))
           : join(skillsDir, skillName);
+
+        if (!existsSync(skillPath)) {
+          // Fall back to category scan: skills/*/<shortName>
+          const short = skillName.replace(/^@[^/]+\//, '');
+          const found = readdirSync(skillsDir, { withFileTypes: true })
+            .filter((d) => d.isDirectory() && !d.name.startsWith('.'))
+            .map((d) => join(skillsDir, d.name, short))
+            .find((p) => existsSync(join(p, 'SKILL.yaml')));
+          if (found) skillPath = found;
+        }
 
         if (!existsSync(skillPath)) {
           throw new Error(`Skill not found: ${skillName}`);

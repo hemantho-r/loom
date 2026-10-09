@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { loadSkill, getValidator } from '@loom/core';
+import { loadSkill, getValidator } from '@loom-skills/core';
 
 export const validateCommand = new Command('validate')
   .description('Validate skill definitions')
@@ -25,9 +25,19 @@ export const validateCommand = new Command('validate')
       const skillDirs: string[] = [];
 
       if (skillName) {
-        const skillPath = skillName.startsWith('@loom/')
-          ? join(skillsDir, skillName.replace('@loom/', ''))
+        let skillPath = /^@[^/]+\//.test(skillName)
+          ? join(skillsDir, skillName.replace(/^@[^/]+\//, ''))
           : join(skillsDir, skillName);
+
+        if (!existsSync(skillPath)) {
+          // Fall back to category scan: skills/*/<shortName>
+          const short = skillName.replace(/^@[^/]+\//, '');
+          const found = readdirSync(skillsDir, { withFileTypes: true })
+            .filter((d) => d.isDirectory() && !d.name.startsWith('.'))
+            .map((d) => join(skillsDir, d.name, short))
+            .find((p) => existsSync(join(p, 'SKILL.yaml')));
+          if (found) skillPath = found;
+        }
 
         if (!existsSync(skillPath)) {
           throw new Error(`Skill not found: ${skillName}`);

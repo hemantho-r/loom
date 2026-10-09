@@ -1,4 +1,4 @@
-name: "@loom/refactoring"
+name: "@loom-skills/refactoring"
 version: "1.0.0"
 description: "Safe, incremental code refactoring"
 license: "MIT"

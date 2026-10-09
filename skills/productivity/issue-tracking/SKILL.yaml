@@ -1,4 +1,4 @@
-name: "@loom/issue-tracking"
+name: "@loom-skills/issue-tracking"
 version: "1.0.0"
 description: "Integration with issue trackers (GitHub, Linear, local)"
 license: "MIT"

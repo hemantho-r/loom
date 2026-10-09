@@ -40,16 +40,19 @@ Wrote code before the test? Delete it. Don't keep it "as reference," don't peek 
 
 Thinking "skip it just this once"? That thought is the rationalization the [Anti-Rationalization](#anti-rationalization) table below exists for. Stop and read it.
 
-## Workflow
+### Step 0: Identify Test Seams & Vertical Slices
+
+- **Establish the Seam:** Confirm the public test boundary ("seam") with your partner or spec before writing any test. Test against public interfaces (API endpoint, exported function, CLI command), not private internal implementation details.
+- **Vertical Slicing:** Drive behavior using end-to-end vertical slices (exercising input -> logic -> state/persistence together) rather than building disconnected horizontal layers (e.g. database schema first, then ORM models, then controllers).
 
 ### Step 1: Red (Write Failing Test)
 
-Write one minimal test showing what should happen.
+Write one minimal test showing what should happen across the identified seam.
 
 **Requirements:**
-- One behavior
-- Clear name
-- Real code (no mocks unless unavoidable)
+- One behavior per test
+- Clear name describing expected contract
+- Real code across the seam (no mocks unless interfacing with external network/hardware)
 
 ### Step 2: Verify Red (Watch It Fail)
 

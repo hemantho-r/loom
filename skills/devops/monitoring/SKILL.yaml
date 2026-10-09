@@ -1,4 +1,4 @@
-name: "@loom/monitoring"
+name: "@loom-skills/monitoring"
 version: "1.0.0"
 description: "Application monitoring and observability"
 license: "MIT"

@@ -9,7 +9,7 @@
     "name": {
       "type": "string",
       "pattern": "^(@[a-z0-9-]+/)?[a-z0-9-]+$",
-      "description": "Unique skill identifier (e.g., @loom/tdd)"
+      "description": "Unique skill identifier (e.g., @loom-skills/tdd)"
     },
     "version": {
       "type": "string",

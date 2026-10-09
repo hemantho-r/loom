@@ -7,7 +7,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 function resolveSkillPath(skillsDir: string, name: string): string | null {
-  const shortName = name.replace('@loom/', '');
+  const shortName = name.replace(/^@[^/]+\//, '');
 
   const flatPath = join(skillsDir, shortName);
   if (existsSync(join(flatPath, 'SKILL.yaml'))) {

@@ -1,4 +1,4 @@
-name: "@loom/review"
+name: "@loom-skills/review"
 version: "1.0.0"
 description: "Multi-axis code review with quality gates"
 license: "MIT"

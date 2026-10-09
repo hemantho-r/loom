@@ -1,4 +1,4 @@
-name: "@loom/tdd"
+name: "@loom-skills/tdd"
 version: "1.0.0"
 description: "Test-driven development with red-green-refactor cycle"
 license: "MIT"

@@ -17,9 +17,9 @@ export const searchCommand = new Command('search')
 
       // Placeholder - in production would query registry
       const results = [
-        { name: '@loom/tdd', description: 'Test-driven development', category: 'engineering' },
-        { name: '@loom/review', description: 'Code review', category: 'engineering' },
-        { name: '@loom/debug', description: 'Debugging workflow', category: 'engineering' },
+        { name: '@loom-skills/tdd', description: 'Test-driven development', category: 'engineering' },
+        { name: '@loom-skills/review', description: 'Code review', category: 'engineering' },
+        { name: '@loom-skills/debug', description: 'Debugging workflow', category: 'engineering' },
       ];
 
       const filtered = results.filter(r => 

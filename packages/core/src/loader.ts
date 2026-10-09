@@ -62,12 +62,13 @@ export class SkillLoader {
   }
 
   /**
-   * Load a skill by package name (e.g., @loom/tdd)
+   * Load a skill by package name (e.g., @loom-skills/tdd).
+   * The scope prefix is stripped generically so any scope works.
    */
   async loadByName(name: string, searchPaths: string[] = []): Promise<LoadedSkill> {
     // Convert package name to path
-    // @loom/tdd -> skills/engineering/tdd
-    const skillDir = name.replace('@loom/', '');
+    // @loom-skills/tdd -> skills/engineering/tdd
+    const skillDir = name.replace(/^@[^/]+\//, '');
 
     // Search in provided paths
     for (const searchPath of searchPaths) {

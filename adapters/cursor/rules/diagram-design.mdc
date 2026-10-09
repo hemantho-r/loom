@@ -175,3 +175,4 @@ Before publishing the diagram, score yourself (1-5):
 - [type-catalog-2.md](references/type-catalog-2.md) — 14 applied domain patterns with construct, budget, pitfall
 - [type-catalog-3.md](references/type-catalog-3.md) — 8 frontier types (deployment, context map, beta-flagged) with renderer checks
 - [import-redraw.md](references/import-redraw.md) — transcribing draw.io/Mermaid/Excalidraw and site brand extraction
+- [diagram-doctor.md](references/diagram-doctor.md) — environment and tooling diagnostic checks

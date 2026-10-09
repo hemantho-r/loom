@@ -12,7 +12,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, basename } from 'node:path';
 import chalk from 'chalk';
-import { getLoader, type LoadedSkill } from '@loom/core';
+import { getLoader, type LoadedSkill } from '@loom-skills/core';
 
 interface EvalScenario {
   name: string;

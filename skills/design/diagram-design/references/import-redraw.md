@@ -2,7 +2,7 @@
 
 Turn an existing diagram or website into first-class Loom inputs: extract the
 structure, pull brand tokens where a site exists, and redraw in the target
-tool. Also used by `@loom/design-systems` brand onboarding.
+tool. Also used by `@loom-skills/design-systems` brand onboarding.
 
 Scripted extractors live in `scripts/` with fixtures under
 `scripts/fixtures/` — run them before hand-transcribing anything:

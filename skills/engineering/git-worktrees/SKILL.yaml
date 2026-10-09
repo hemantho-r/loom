@@ -1,4 +1,4 @@
-name: "@loom/git-worktrees"
+name: "@loom-skills/git-worktrees"
 version: "1.0.0"
 description: "Parallel development with git worktrees"
 license: "MIT"

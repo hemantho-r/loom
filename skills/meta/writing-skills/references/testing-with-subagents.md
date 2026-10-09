@@ -24,7 +24,7 @@ whether the skill prevents the right failure.**
 | **GREEN** | Write (or revise) the skill to address that specific, observed rationalization — not hypothetical ones you imagine in advance. |
 | **REFACTOR** | Re-run the same scenario WITH the skill loaded. If the subagent finds a new rationalization to route around the skill, add an explicit counter (a rationalization-table row + a red-flag entry) and re-test. Repeat until it holds under pressure. |
 
-This mirrors `red-before-green` from `@loom/tdd` — you can't know a skill
+This mirrors `red-before-green` from `@loom-skills/tdd` — you can't know a skill
 plugs a hole you never watched an agent fall into.
 
 ## Writing a Real Pressure Scenario

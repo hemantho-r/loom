@@ -24,13 +24,15 @@ A systematic approach to finding and fixing bugs. The goal is to understand the 
 
 ## Workflow
 
-### Step 1: Reproduce
+### Step 1: Reproduce & Build Feedback Loop
 
-Before fixing, reproduce the bug consistently.
+**Feedback-Loop-First Rule:** Construct a fast, automated repro feedback loop first — that is 90% of the fix. **Rule:** Zero theorizing or code patching before the automated repro loop exists.
 
-- Write a failing test that demonstrates the bug
-- If you can't reproduce it, you can't verify the fix
-- Document the exact steps to reproduce
+- Write an automated failing test or one-command script that reproduces the bug consistently.
+- Formulate a falsifiable hypothesis:
+  `Hypothesis -> Automated Repro Loop -> Empirical Observation -> Resolution`
+- If you cannot reproduce it in an automated loop, you cannot verify the fix.
+- Document the exact steps and command line to trigger the repro loop.
 
 ### Step 2: Isolate
 

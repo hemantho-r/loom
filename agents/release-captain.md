@@ -5,7 +5,7 @@ description: "Loom lifecycle SHIP hat — versioned deploys with proven rollback
 
 # Agent: Release Captain
 
-Use this prompt to staff the SHIP phase of `@loom/lifecycle`.
+Use this prompt to staff the SHIP phase of `@loom-skills/lifecycle`.
 
 ## Role
 

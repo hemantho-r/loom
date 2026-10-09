@@ -34,3 +34,7 @@ coverage/
 # Temporary
 tmp/
 temp/
+
+# Loom test fixtures (recreated by loader tests on every run)
+test-skills/
+packages/core/test-skills/

@@ -80,8 +80,16 @@ Does the change introduce performance problems?
 | **Critical:** | Blocks merge | Security vulnerability, data loss |
 | **Nit:** | Minor, optional | Author may ignore |
 | **Optional:** | Suggestion | Worth considering |
+| **FYI:** | Informational | No action needed, context for future reference |
 
-**Quantify your comments.** "This could be slow" is not reviewable; "this adds an N+1 query — ~50ms per item at current record counts" is. If you can't quantify it, say what you'd need to measure to find out, not just that you're suspicious.
+## Parallel Sub-Agent Review Delegation
+
+For non-trivial reviews (>100 lines or multi-component changes), do not run all five axes in a single linear pass where one finding biases another. Invoke two independent subagents in parallel (`invoke_subagent`):
+
+- **Subagent A (Standards & Security Axis):** Focuses strictly on correctness, missing tests, edge cases, input validation, and security vulnerabilities (OWASP).
+- **Subagent B (Spec & Architecture Axis):** Focuses strictly on requirement compliance, module boundaries, readability, and performance bounds.
+
+Consolidate findings into the final review report only after both subagents complete their independent checks.
 
 ## Change Sizing
 

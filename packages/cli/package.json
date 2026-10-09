@@ -1,7 +1,16 @@
 {
-  "name": "@loom/cli",
+  "name": "@loom-skills/cli",
   "version": "0.1.0",
   "description": "Command-line interface for Loom skill system",
+  "homepage": "https://github.com/hemantho-r/loom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hemantho-r/loom.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/hemantho-r/loom/issues"
+  },
   "type": "module",
   "main": "dist/index.js",
   "bin": {

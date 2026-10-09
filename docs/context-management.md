@@ -82,7 +82,7 @@ You can override detected context:
 LOOM_CONTEXT_LANGUAGE=python loom test
 
 # Override framework
-LOOM_CONTEXT_FRAMEWORK=react loom compose @loom/tdd
+LOOM_CONTEXT_FRAMEWORK=react loom compose @loom-skills/tdd
 ```
 
 ## Context in Composition

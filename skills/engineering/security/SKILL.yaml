@@ -1,4 +1,4 @@
-name: "@loom/security"
+name: "@loom-skills/security"
 version: "1.0.0"
 description: "Security review and hardening for applications"
 license: "MIT"

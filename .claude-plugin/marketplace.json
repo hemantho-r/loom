@@ -1,0 +1,15 @@
+{
+  "name": "loom-marketplace",
+  "description": "Loom skill operating system — 26 validated skills as a Claude Code plugin",
+  "owner": {
+    "name": "Loom Team"
+  },
+  "plugins": [
+    {
+      "name": "loom",
+      "source": "./",
+      "description": "Skills woven together — 26 composable engineering, design, productivity, and devops skills",
+      "version": "0.1.0"
+    }
+  ]
+}

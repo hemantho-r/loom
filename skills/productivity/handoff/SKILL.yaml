@@ -1,4 +1,4 @@
-name: "@loom/handoff"
+name: "@loom-skills/handoff"
 version: "1.0.0"
 description: "Context handoff between agents or sessions"
 license: "MIT"

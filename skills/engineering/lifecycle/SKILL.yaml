@@ -1,4 +1,4 @@
-name: "@loom/lifecycle"
+name: "@loom-skills/lifecycle"
 version: "1.0.0"
 description: "End-to-end delivery lifecycle: DEFINE to SHIP with triage and approval gates"
 license: "MIT"

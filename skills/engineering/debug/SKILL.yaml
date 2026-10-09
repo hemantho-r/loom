@@ -1,4 +1,4 @@
-name: "@loom/debug"
+name: "@loom-skills/debug"
 version: "1.0.0"
 description: "Systematic debugging workflow for finding and fixing bugs"
 license: "MIT"

@@ -5,7 +5,7 @@
 
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { loadSkill, Validator } from '@loom/core';
+import { loadSkill, Validator } from '@loom-skills/core';
 
 const rootDir = process.cwd();
 const skillsDir = join(rootDir, 'skills');

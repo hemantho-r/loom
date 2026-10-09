@@ -173,7 +173,7 @@ Choose different palettes:
 ### Extract Brand from URL
 
 Requires the `web-fetch` capability (declared optional in SKILL.yaml).
-Follow the "From a website URL" procedure in the `@loom/diagram-design`
+Follow the "From a website URL" procedure in the `@loom-skills/diagram-design`
 skill's `import-redraw.md` reference — fetch, extract, emit `brand.ts`,
 record source URL and date — then derive tokens as below.
 
