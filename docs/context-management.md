@@ -73,18 +73,6 @@ The Review skill checks language-specific issues:
 - TypeScript: Type safety, proper typing
 - JavaScript: Common pitfalls, async patterns
 
-## Manual Context Override
-
-You can override detected context:
-
-```bash
-# Override language
-LOOM_CONTEXT_LANGUAGE=python loom test
-
-# Override framework
-LOOM_CONTEXT_FRAMEWORK=react loom compose @loom-skills/tdd
-```
-
 ## Context in Composition
 
 When composing skills, Loom checks context compatibility:
@@ -102,13 +90,3 @@ context:
 ```
 
 These skills cannot be composed together because they require different languages.
-
-## Debugging Context
-
-To see what context Loom detected:
-
-```bash
-loom list --verbose
-```
-
-This shows the detected context for each installed skill.

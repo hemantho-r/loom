@@ -63,10 +63,10 @@ rationalization to surface because there's nothing to skip. Reserve it
 for skills whose whole job is holding the line under pressure: `tdd`,
 `review`, `security`, `debug`, and this skill itself.
 
-## Relationship to `loom validate`
+## Relationship to `pnpm validate`
 
-This is a manual/agent-run practice, not something `loom validate` can
+This is a manual/agent-run practice, not something `pnpm validate` can
 check — no static analysis can tell whether a skill survives contact with
 a pressured agent. Treat it as a recommended pre-publish step for
 discipline skills, complementary to (not a replacement for) the
-structural/content checks `loom validate` already runs.
+structural/content checks `pnpm validate` already runs.

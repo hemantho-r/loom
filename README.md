@@ -4,7 +4,7 @@
 
 Most agent skills are a single `SKILL.md` an agent reads on faith. Loom packages each skill as `SKILL.yaml` (a machine-checkable capability contract: what it provides, what it requires, which quality gates it declares) plus `SKILL.md` (the instructions) plus `references/` (detail loaded only when needed). A validator actually checks the contract — schema, naming, semver, and the content sections a skill claims to have — instead of trusting that the author got it right.
 
-Loom is a monorepo of 26 such skills across engineering, design, productivity, devops, and meta, plus an internal runtime (`@loom-skills/core`, not published — bundled directly into the CLI), a CLI (`@loom-skills/loom`, binary name `loom`), and generators that translate every skill into Claude Code, Cursor, and other agent-native formats.
+Loom is a monorepo of 26 such skills across engineering, design, productivity, devops, and meta, plus an internal runtime (`@loom-skills/core`, not published — used only by this repo's own dev tooling) and generators that translate every skill into Claude Code, Cursor, and other agent-native formats. There is no CLI — `@loom-skills/loom` is a plain npm package whose only job is to drop the skill files where an agent host can find them.
 
 ---
 
@@ -16,48 +16,33 @@ pnpm install
 pnpm build
 
 pnpm validate          # schema + content-gate check across all 26 skills
-loom compose @loom-skills/tdd @loom-skills/review -o workflow.md   # merge skills into one doc
-```
-
-`loom` above assumes the CLI is linked globally. From a fresh clone, either run it directly (`node packages/cli/dist/index.js validate`) or link it once:
-
-```bash
-cd packages/cli && npm link   # after `pnpm build` — makes `loom` available globally
 ```
 
 ### Installing via npm
 
-`@loom-skills/loom` is a self-contained package: its build (`esbuild`, not `tsc`) bundles
-`@loom-skills/core`'s code directly into `dist/index.js`, so the published artifact has
-zero dependency on `@loom-skills/core`/`@loom-skills/schema` ever being installed separately
-(`packages/cli/package.json`'s `dependencies` only lists real, independently
-published npm packages — `commander`, `chalk`, `ora`, `vitest`, `yaml`).
-Verified end-to-end this session: `npm pack` (plain npm, not pnpm) produces a
-2-file tarball with no `@loom-skills/*`/`workspace:*` anywhere in its manifest, and
-`npm install -g <that-tarball>` gives a fully working `loom` binary from a
-directory with no relation to this repo.
+```bash
+npm install -g @loom-skills/loom
+```
+
+That's the entire interface — no commands, no flags. A `postinstall` script
+copies the 26 bundled skills (shipped under `dist/skills/`, built via `cp -R
+../../skills/. dist/skills/`) straight into `~/.loom/skills/`. Verified
+end-to-end: `npm pack` produces a tarball containing only `dist/` (the
+skills) and `scripts/postinstall.mjs` — no dependencies, no binary, no
+`@loom-skills/*`/`workspace:*` references anywhere in its manifest — and a
+genuinely fresh `npm install -g @loom-skills/loom` from the public registry
+populates `~/.loom/skills/` with all 26 skills with nothing else to run.
 
 `@loom-skills/core` and `@loom-skills/schema` are intentionally **not**
 published — nothing external consumes either (no documented integration
 beyond this repo's own internal build tooling), so they're marked
-`"private": true` and stay workspace-only. Only the self-contained CLI is
-shipped to the registry, under the name `@loom-skills/loom` (previously
-`@loom-skills/cli` — renamed once the generic `cli` subpackage name no
-longer had anything to disambiguate against). Once `npm login` succeeds for
-an org member, run:
+`"private": true` and stay workspace-only. Once `npm login` succeeds for an
+org member, republishing is:
 
 ```bash
 pnpm run release:dry-run   # builds, then pnpm -r publish --access public --dry-run
 pnpm run release           # the real thing — only publishes @loom-skills/loom, core/schema are private
 ```
-
-`npm install -g @loom-skills/loom` will work exactly as shown in Quick start above.
-
-The published package also bundles all 26 skills (copied into `dist/skills/`
-at build time) and installs them automatically via a `postinstall` script —
-`npm install -g @loom-skills/loom` alone drops the full skill library into
-`~/.loom/skills/`, with no separate `loom install` step and no other CLI
-command required to get the base library in place.
 
 ---
 
@@ -83,7 +68,7 @@ can consume the same 26 skills.
 | OpenCode | Point it at `adapters/opencode/AGENTS.md` |
 | Gemini | Point it at `adapters/gemini/GEMINI.md` |
 | Any agent | Read `skills/<category>/<name>/SKILL.md` directly — plain Markdown, no tooling |
-| CLI users | `npm install -g @loom-skills/loom` — installs all 26 skills automatically into `~/.loom/skills/` |
+| npm | `npm install -g @loom-skills/loom` — installs all 26 skills automatically into `~/.loom/skills/` |
 
 All adapter files are generated, not hand-written: `pnpm generate:adapters`
 rebuilds them from the current skill set (26 slash commands, 26 Cursor
@@ -99,8 +84,7 @@ none are installed.
 skills/<category>/<skill-name>/
 ├── SKILL.yaml       # capability contract: provides / requires / context / quality gates
 ├── SKILL.md         # instructions: overview, workflow, anti-rationalization, red flags
-├── references/      # loaded only when the workflow points at them (progressive disclosure)
-└── tests/           # optional — vitest specs `loom test` actually executes
+└── references/      # loaded only when the workflow points at them (progressive disclosure)
 ```
 
 A minimal contract:
@@ -121,7 +105,7 @@ references:
 invocation: "model"   # user | model | either
 ```
 
-`loom validate` checks every field above — plus, for `type: content` gates like `has-overview`, whether `SKILL.md` actually has the heading it claims to. `behavioral`/`performance` gates are listed as **requiring manual verification**, not silently marked passed — Loom has no runtime that observes what an agent actually does, so it doesn't pretend to.
+`pnpm validate` checks every field above — plus, for `type: content` gates like `has-overview`, whether `SKILL.md` actually has the heading it claims to. `behavioral`/`performance` gates are listed as **requiring manual verification**, not silently marked passed — Loom has no runtime that observes what an agent actually does, so it doesn't pretend to.
 
 ---
 
@@ -175,17 +159,17 @@ invocation: "model"   # user | model | either
 
 ---
 
-## CLI
+## Repo-level scripts
 
-| Command | What it does |
+There is no `loom` CLI — these are plain `pnpm` scripts for working on this
+monorepo, not something an installed package exposes:
+
+| Script | What it does |
 |---|---|
-| `loom validate [skill]` | Schema, naming, semver, and content-gate checks. Exits non-zero on failure. |
-| `loom test [skill]` | Runs each skill's `tests/*.test.ts` via vitest and reports real pass/fail. |
-| `loom compose <skills...>` | Merges multiple skills into one workflow document. |
-| `loom init <name>` | Scaffolds a new skill's `SKILL.yaml` / `SKILL.md` / `references/`. |
-| `loom list`, `loom install`, `loom search`, `loom publish` | Registry-oriented commands built around a `.loom/skills/` install directory, not this repo's `skills/` tree — there's no remote registry yet, so `install`/`publish` operate on local paths and `search` returns placeholder data. Treat as scaffolding for a future registry, not working package management. |
-
-Repo-level scripts (not `loom` subcommands): `pnpm validate` (same checks, run across the whole `skills/` tree), `pnpm check` (verifies every declared reference file exists and is linked from its `SKILL.md`), `pnpm eval` (traces eval scenarios back to the quality gates they reference), `pnpm generate:adapters` (regenerates the Cursor/Claude adapter files below from the current skill set).
+| `pnpm validate` | Schema, naming, semver, and content-gate checks across all 26 skills. Exits non-zero on failure. |
+| `pnpm check` | Verifies every declared reference file exists and is linked from its `SKILL.md`. |
+| `pnpm eval` | Traces eval scenarios back to the quality gates they reference. |
+| `pnpm generate:adapters` | Regenerates the Cursor/Claude adapter files below from the current skill set. |
 
 ---
 

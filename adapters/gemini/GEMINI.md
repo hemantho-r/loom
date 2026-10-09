@@ -51,7 +51,7 @@ All skills enforce quality gates declared in their `SKILL.yaml`:
 - **warning**: Should be satisfied
 - **info**: For reference only
 
-`loom validate` checks structural and content gates automatically; behavioral
+`pnpm validate` checks structural and content gates automatically; behavioral
 and performance gates are listed as requiring manual verification.
 
 ## Context

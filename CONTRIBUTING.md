@@ -27,13 +27,11 @@ node scripts/validate-skills.mjs
 
 ## Creating a Skill
 
-1. Run `loom init my-skill --category engineering`
-2. Edit `SKILL.yaml` with your skill definition
+1. Create `skills/<category>/<name>/` by hand (see [`skills/meta/writing-skills/SKILL.md`](skills/meta/writing-skills/SKILL.md) for the authoring guide and `SKILL.yaml` schema)
+2. Write `SKILL.yaml` with your skill definition
 3. Write `SKILL.md` with your skill instructions
 4. Add references in `references/`
-5. Add tests in `tests/`
-6. Run `loom validate` to check for issues
-7. Run `loom test` to verify tests pass
+5. Run `pnpm validate` to check for issues
 
 ## Skill Guidelines
 

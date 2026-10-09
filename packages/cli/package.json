@@ -1,7 +1,7 @@
 {
   "name": "@loom-skills/loom",
   "version": "0.1.0",
-  "description": "Command-line interface for Loom skill system",
+  "description": "Installs the Loom skill library into ~/.loom/skills on npm install — no CLI, just the skills",
   "homepage": "https://github.com/hemantho-r/loom",
   "repository": {
     "type": "git",
@@ -12,10 +12,6 @@
     "url": "https://github.com/hemantho-r/loom/issues"
   },
   "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "loom": "dist/index.js"
-  },
   "files": [
     "dist",
     "scripts"
@@ -24,23 +20,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "rm -rf dist && esbuild src/index.ts --bundle --platform=node --format=esm --target=node18 --outfile=dist/index.js --external:commander --external:chalk --external:ora --external:vitest --external:yaml && chmod +x dist/index.js && mkdir -p dist/skills && cp -R ../../skills/. dist/skills/",
-    "dev": "tsc --watch",
-    "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit",
+    "build": "rm -rf dist && mkdir -p dist/skills && cp -R ../../skills/. dist/skills/",
     "clean": "rm -rf dist",
     "postinstall": "node scripts/postinstall.mjs"
-  },
-  "dependencies": {
-    "commander": "^12.0.0",
-    "chalk": "^5.3.0",
-    "ora": "^8.0.0",
-    "vitest": "^1.6.0",
-    "yaml": "^2.4.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.4.0",
-    "@types/node": "^20.0.0",
-    "esbuild": "^0.21.0"
   }
 }

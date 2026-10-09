@@ -43,9 +43,11 @@ Skills woven together — A skill operating system for AI coding agents.
 ## Installation
 
 ```bash
-loom install @loom-skills/tdd
-loom install @loom-skills/review
+npm install -g @loom-skills/loom
 ```
+
+No further command needed — a `postinstall` script drops all 26 skills into
+`~/.loom/skills/` automatically.
 
 ## Usage
 
@@ -54,7 +56,8 @@ full instructions live in `skills/<category>/<name>/SKILL.md`.
 
 ### Quality Gates
 
-Each skill defines quality gates in its `SKILL.yaml`, enforced by `loom validate`:
+Each skill defines quality gates in its `SKILL.yaml`, enforced by `pnpm validate`
+(a repo-level script, not an installed command):
 
 - **error**: Must be satisfied before proceeding
 - **warning**: Should be satisfied, warnings shown
@@ -66,11 +69,3 @@ Skills adapt to your project's context:
 - Language (TypeScript, JavaScript, Python, etc.)
 - Framework (React, Vue, Node, etc.)
 - Test runner (Jest, Vitest, etc.)
-
-## Composing Skills
-
-```bash
-loom compose @loom-skills/tdd @loom-skills/review
-```
-
-This creates a combined workflow that applies both skills.

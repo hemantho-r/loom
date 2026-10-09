@@ -185,26 +185,8 @@ references:
     when: "for-advanced-cases"
 ```
 
-## Testing
-
-Every skill should have tests:
-
-```typescript
-import { describe, it, expect } from 'vitest';
-
-describe('my-skill', () => {
-  it('should load successfully', async () => {
-    // Test that the skill loads correctly
-  });
-
-  it('should follow quality gates', async () => {
-    // Test that quality gates are enforced
-  });
-});
-```
-
 ## Publishing
 
-1. Validate your skill: `loom validate`
-2. Test your skill: `loom test`
-3. Publish: `loom publish`
+1. Validate your skill: `pnpm validate`
+2. Run `pnpm check` to confirm every declared reference exists and is linked
+3. Open a PR — see [CONTRIBUTING.md](../CONTRIBUTING.md)

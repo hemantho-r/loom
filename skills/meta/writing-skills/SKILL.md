@@ -145,13 +145,13 @@ Before publishing the skill, score yourself (1-5):
 | "The self-critique score is high, the skill is done" | A self-score measures whether the author thinks it's clear, not whether an agent under pressure will follow it. Score and pressure-test are different checks. |
 | "This category doesn't quite fit, I'll invent a new one" | An invented category with no matching `skills/<category>/` directory is exactly how this repo ended up with a phantom `data` category that never existed on disk. Use an existing category or add the directory for real. |
 | "I'll write generic advice, it'll apply to everything" | Generic advice is what every audited-and-flagged Loom skill had in common — specificity to the actual domain is what separates a useful skill from filler. |
-| "The quality gates are declared, that's the enforcement" | Declaring a gate in SKILL.yaml doesn't teach it — `loom validate` only checks gates it recognizes (structural/content); everything else needs the body to actually explain the behavior. |
+| "The quality gates are declared, that's the enforcement" | Declaring a gate in SKILL.yaml doesn't teach it — `pnpm validate` only checks gates it recognizes (structural/content); everything else needs the body to actually explain the behavior. |
 | "I copied a working example from another skill's code, close enough" | An untested code example that looks plausible is exactly how this repo shipped a fabricated CLI command and an undefined helper function in two different skills. Verify it runs, or verify it's real. |
 | "Nobody will actually invoke this skill under real pressure" | If that's true, it doesn't need an Anti-Rationalization table at all — but if it's a discipline skill (tdd/review/security-shaped), assume it will be, because that's exactly when skills get skipped. |
 
 ## Red Flags — STOP and Reconsider
 
-- A `references:` entry in SKILL.yaml has no corresponding file on disk — `loom validate` will catch this, but check before shipping, not after.
+- A `references:` entry in SKILL.yaml has no corresponding file on disk — `pnpm validate` will catch this, but check before shipping, not after.
 - A reference file exists but SKILL.md never links to it in a `## References` section — an agent reading only SKILL.md can't discover it.
 - The Anti-Rationalization table has 3 or fewer rows for a skill whose entire job is resisting a shortcut — that's a sign the excuses weren't actually gathered from a real failure, just invented in the abstract.
 - A code example, API name, or CLI command is included without verifying it's real (running it, or checking it against actual documentation).

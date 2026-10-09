@@ -3,48 +3,29 @@
 ## Installation
 
 ```bash
-# Install globally
 npm install -g @loom-skills/loom
-
-# Or use npx
-npx @loom-skills/loom --help
 ```
 
-## Quick Start
+That's it — no further command. A `postinstall` script drops all 26 bundled
+skills into `~/.loom/skills/` automatically. There is no CLI to learn.
 
-### 1. Install a Skill
+## Using a Skill
 
-```bash
-loom install @loom-skills/tdd
-```
-
-### 2. Use the Skill
-
-Once installed, the skill is available in your project. The skill adapts to your project's context (language, framework, test runner).
-
-### 3. Compose Skills
-
-```bash
-loom compose @loom-skills/tdd @loom-skills/review
-```
-
-This creates a combined workflow that applies both skills.
+Once installed, point your agent host at the skill file directly —
+`~/.loom/skills/<name>/SKILL.md` — or use one of the generated per-host
+adapters in this repo (`adapters/`, `commands/`, `.claude-plugin/`). See the
+main [README](../README.md#get-loom-install-the-offering) for the full list
+of hosts and how each one consumes the skills.
 
 ## Creating Your First Skill
 
-### 1. Initialize
+### 1. Create the directory
 
 ```bash
-loom init my-skill --category engineering
+mkdir -p skills/engineering/my-skill/references
 ```
 
-This creates:
-- `skills/engineering/my-skill/SKILL.yaml` - Skill definition
-- `skills/engineering/my-skill/SKILL.md` - Skill instructions
-- `skills/engineering/my-skill/references/` - Supporting docs
-- `skills/engineering/my-skill/tests/` - Test files
-
-### 2. Edit SKILL.yaml
+### 2. Write SKILL.yaml
 
 ```yaml
 name: "@loom-skills/my-skill"
@@ -103,31 +84,15 @@ What this skill does and when to use it.
 ### 4. Validate
 
 ```bash
-loom validate my-skill
+pnpm validate
 ```
 
-### 5. Test
-
-```bash
-loom test my-skill
-```
-
-## CLI Commands
-
-| Command | Description |
-|---------|-------------|
-| `loom install <package>` | Install a skill package |
-| `loom list` | List installed skills |
-| `loom compose <skills...>` | Compose skills into a workflow |
-| `loom test [skill]` | Run skill tests |
-| `loom validate [skill]` | Validate skill definitions |
-| `loom init <name>` | Initialize a new skill |
-| `loom search <query>` | Search for skills |
-| `loom publish` | Publish to registry |
+See [skill-authoring.md](./skill-authoring.md) for the full authoring guide,
+including the Anti-Rationalization/Red Flags sections every discipline skill
+should have.
 
 ## Next Steps
 
 - Read the [Skill Authoring Guide](./skill-authoring.md)
-- Learn about [Composition](./composition.md)
 - Understand [Context Management](./context-management.md)
 - Explore [Quality Gates](./quality-gates.md)

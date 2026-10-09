@@ -50,7 +50,7 @@ instructions live in `skills/<category>/<name>/SKILL.md`.
 ## Quality Gates
 
 All Loom skills enforce quality gates declared in their `SKILL.yaml`, checked
-by `loom validate`:
+by `pnpm validate`:
 - **error**: Must be satisfied
 - **warning**: Should be satisfied
 - **info**: For reference only

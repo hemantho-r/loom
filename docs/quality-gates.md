@@ -18,7 +18,7 @@ only the first can block a command.
 
 Rule of thumb: if no script in this repo can fail it, it is a practice
 gate — declare it, teach it in the body, grade it with the rubric, but do
-not describe it as enforced. `loom validate` lists practice gates under
+not describe it as enforced. `pnpm validate` lists practice gates under
 "requires manual verification" for exactly this reason.
 
 ## Types of Quality Gates
@@ -81,7 +81,7 @@ Must be satisfied before the skill validates:
 severity: "error"
 ```
 
-If an error gate fails, `loom validate` (and `pnpm validate`) reports the
+If an error gate fails, `pnpm validate` reports the
 skill as invalid and exits non-zero. This is a validation-time check, not a
 runtime one — Loom has no execution engine that runs a skill and inspects
 its output.
@@ -94,9 +94,8 @@ Should be satisfied, but not blocking:
 severity: "warning"
 ```
 
-If a warning gate fails, `loom validate` prints it but still reports the
-skill as valid (unless run with `--strict`, which treats warnings as
-errors).
+If a warning gate fails, `pnpm validate` prints it but still reports the
+skill as valid.
 
 ### Info
 
@@ -111,7 +110,7 @@ Info gates are informational and don't block or warn.
 ## What's Actually Automated vs. Manual
 
 Loom's validator (`@loom-skills/core`'s `Validator.validateLoaded()`, used by both
-`loom validate` and `pnpm validate`) can only check things that are visible
+`pnpm validate`) can only check things that are visible
 in the skill package itself — the YAML definition and the SKILL.md text. It
 cannot observe what an agent actually does while following a skill's
 instructions. Gates fall into two buckets accordingly:
@@ -139,7 +138,7 @@ Everything else — `type: "behavioral"` and `type: "performance"` gates
 (e.g. `red-before-green`, `no-hallucination`, `progressive-disclosure`,
 `fast-test`), plus any custom gate id the validator doesn't recognize —
 describes runtime agent behavior that can't be statically verified from the
-skill package. `loom validate` lists these under "requires manual
+skill package. `pnpm validate` lists these under "requires manual
 verification" rather than silently marking them as passed. Verifying them
 means a human (or the agent itself, per its instructions) checking that the
 behavior actually happened during a real session.
@@ -165,7 +164,7 @@ code.
 Gates are checked at these points — match each gate to the strongest point
 that can actually see it:
 
-1. **`loom validate` / `pnpm validate`** — schema, name, version, and
+1. **`pnpm validate`** — schema, name, version, and
    content-heading checks against the skill package on disk. Behavioral
    and performance gates are surfaced as informational notes, not enforced.
 2. **`pnpm check`** (`scripts/check-consistency.mjs`, CI-gated) — every
